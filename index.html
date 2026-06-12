@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SFO / SEA → Europe → Podgorica · Award Flight Comparison</title>
+  <meta name="description" content="Premium award-travel dashboard comparing business class options from SFO/SEA to Europe, with onward connection analysis to Podgorica (TGD)." />
+  <!-- Premium typography: Cormorant (luxe headline accent) + Inter (UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+  /* ============================================================
+     DESIGN TOKENS — tweak the palette here
+     ============================================================ */
+  :root{
+    --bg:#05070f;
+    --bg-2:#080b18;
+    --ink:#eef2ff;
+    --muted:#9aa6c4;
+    --faint:#6b7593;
+    --gold:#e8c473;
+    --gold-2:#f6e3b0;
+    --cyan:#5fe3ff;
+    --cyan-2:#9af0ff;
+    --good:#56e0a0;
+    --warnv:#ffb454;
+    --bad:#ff6b85;
+    --glass:rgba(255,255,255,.045);
+    --glass-2:rgba(255,255,255,.07);
+    --stroke:rgba(255,255,255,.10);
+    --stroke-strong:rgba(255,255,255,.18);
+    --radius:20px;
+    --shadow:0 30px 80px -30px rgba(0,0,0,.8);
+    --maxw:1240px;
+    --sans:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --serif:"Cormorant Garamond",Georgia,serif;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:var(--sans);
+    color:var(--ink);
+    background:radial-gradient(1200px 700px at 78% -8%, #122042 0%, transparent 55%),
+               radial-gradient(900px 600px at 8% 6%, #1a1238 0%, transparent 50%),
+               linear-gradient(180deg,var(--bg),var(--bg-2));
+    background-attachment:fixed;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ---- decorative backgrounds ---- */
+  .bg-aurora{
+    position:fixed; inset:-20% -10% auto -10%; height:70vh; z-index:0; pointer-events:none;
+    background:conic-gradient(from 120deg at 50% 50%, rgba(95,227,255,.10), rgba(232,196,115,.10), rgba(120,90,255,.10), rgba(95,227,255,.10));
+    filter:blur(90px); opacity:.55; animation:spin 38s linear infinite;
+  }
+  .bg-grid{
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:46px 46px;
+    -webkit-mask-image:radial-gradient(circle at 50% 18%, #000 0%, transparent 72%);
+            mask-image:radial-gradient(circle at 50% 18%, #000 0%, transparent 72%);
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .wrap{position:relative; z-index:1; max-width:var(--maxw); margin:0 auto; padding:34px 22px 60px}
+
+  /* ============================================================ HERO */
+  .hero{padding:46px 0 30px; text-align:center}
+  .hero-kicker{
+    display:inline-flex; align-items:center; gap:9px; font-size:11px; letter-spacing:.28em;
+    color:var(--gold); font-weight:600; padding:8px 16px; border-radius:999px;
+    background:var(--glass); border:1px solid var(--stroke); backdrop-filter:blur(10px);
+  }
+  .hero-kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .hero-title{
+    font-family:var(--serif); font-weight:600; letter-spacing:.5px;
+    font-size:clamp(34px,7vw,76px); line-height:1.02; margin:22px 0 12px;
+    display:flex; flex-wrap:wrap; gap:.35em; justify-content:center; align-items:baseline;
+  }
+  .hero-title .from{background:linear-gradient(180deg,#fff,#b9c6ef);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-title .via{color:var(--cyan-2);text-shadow:0 0 30px rgba(95,227,255,.35)}
+  .hero-title .to{background:linear-gradient(180deg,var(--gold-2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-title .arrow{color:var(--faint);font-family:var(--sans);font-size:.5em;transform:translateY(-.15em)}
+  .hero-sub{color:var(--muted);font-size:clamp(14px,2.2vw,18px);max-width:640px;margin:0 auto 8px}
+
+  .stat-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
+  .stat-card{
+    position:relative; text-align:left; padding:20px 18px 18px; border-radius:18px;
+    background:linear-gradient(180deg,var(--glass-2),var(--glass));
+    border:1px solid var(--stroke); backdrop-filter:blur(14px);
+    overflow:hidden; transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .35s;
+  }
+  .stat-card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+    background:linear-gradient(135deg,rgba(232,196,115,.55),transparent 40%,rgba(95,227,255,.45));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;opacity:.6;transition:opacity .35s}
+  .stat-card:hover{transform:translateY(-6px)}
+  .stat-card:hover::before{opacity:1}
+  .stat-card.warn::before{background:linear-gradient(135deg,rgba(255,180,84,.6),transparent 45%,rgba(255,107,133,.4))}
+  .stat-ic{font-size:18px;color:var(--gold);margin-bottom:8px}
+  .stat-card.warn .stat-ic{color:var(--warnv)}
+  .stat-label{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .stat-value{font-size:16px;font-weight:700;margin:5px 0 4px;line-height:1.25}
+  .stat-meta{font-size:12px;color:var(--muted)}
+
+  /* ============================================================ CONTROLS */
+  .controls{position:sticky;top:0;z-index:40;margin:30px 0 26px;padding:14px;border-radius:18px;
+    background:rgba(10,13,26,.72);border:1px solid var(--stroke);backdrop-filter:blur(18px) saturate(140%);box-shadow:var(--shadow)}
+  .controls-row{display:flex;flex-wrap:wrap;align-items:center;gap:18px}
+  .control-group{display:flex;align-items:center;gap:10px}
+  .control-group.toggles{flex-wrap:wrap;gap:8px 16px}
+  .control-group.actions{margin-left:auto;gap:10px}
+  .control-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .select-wrap{position:relative}
+  .select-wrap::after{content:"▾";position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--gold);font-size:11px}
+  select{appearance:none;background:var(--glass-2);border:1px solid var(--stroke-strong);color:var(--ink);
+    font:600 13px var(--sans);padding:9px 32px 9px 13px;border-radius:11px;cursor:pointer;outline:none;transition:border-color .2s}
+  select:hover{border-color:var(--gold)}
+  select option{background:#0b0f1e;color:var(--ink)}
+
+  .toggle{display:inline-flex;align-items:center;gap:9px;cursor:pointer;user-select:none}
+  .toggle input{position:absolute;opacity:0;width:0;height:0}
+  .toggle .track{width:40px;height:22px;border-radius:999px;background:var(--glass-2);border:1px solid var(--stroke-strong);position:relative;transition:.25s}
+  .toggle .track::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--muted);transition:.25s}
+  .toggle input:checked + .track{background:linear-gradient(90deg,var(--cyan),#3aa9ff);border-color:transparent}
+  .toggle input:checked + .track::after{transform:translateX(18px);background:#04101a}
+  .toggle input:focus-visible + .track{outline:2px solid var(--gold);outline-offset:2px}
+  .toggle-text{font-size:12.5px;color:var(--muted);font-weight:500}
+  .toggle:hover .toggle-text{color:var(--ink)}
+
+  .btn{font:600 12.5px var(--sans);padding:9px 15px;border-radius:11px;cursor:pointer;border:1px solid var(--stroke-strong);
+    background:var(--glass-2);color:var(--ink);transition:.2s;display:inline-flex;align-items:center;gap:7px}
+  .btn.ghost:hover{border-color:var(--gold);color:var(--gold-2);transform:translateY(-2px)}
+  .link-btn{background:none;border:none;color:var(--cyan-2);cursor:pointer;font:inherit;text-decoration:underline}
+
+  /* ============================================================ SECTION HEADS */
+  .section-head{display:flex;align-items:center;gap:14px;margin:42px 0 20px}
+  .section-head h2{font-family:var(--serif);font-weight:600;font-size:clamp(24px,3.6vw,36px);margin:0;letter-spacing:.4px}
+  .section-head h2::after{content:"";display:inline-block;width:46px;height:2px;margin-left:14px;vertical-align:middle;
+    background:linear-gradient(90deg,var(--gold),transparent)}
+  .count-pill{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--gold);padding:5px 12px;border-radius:999px;
+    background:var(--glass);border:1px solid var(--stroke)}
+  .count-pill.subtle{color:var(--faint)}
+
+  /* ============================================================ FLIGHT CARDS */
+  .cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+  .card{
+    position:relative;border-radius:var(--radius);padding:24px 22px 20px;
+    background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+    border:1px solid var(--stroke);backdrop-filter:blur(16px);box-shadow:var(--shadow);
+    transition:transform .4s cubic-bezier(.2,.8,.2,1),border-color .4s;overflow:hidden;
+  }
+  .card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+    background:linear-gradient(140deg,var(--seg1,rgba(95,227,255,.5)),transparent 38%,var(--seg2,rgba(232,196,115,.4)));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;opacity:.55;transition:opacity .4s}
+  .card:hover{transform:translateY(-8px)}
+  .card:hover::before,.card:focus-within::before{opacity:1}
+  .card:focus-within{border-color:var(--stroke-strong)}
+
+  /* ribbons */
+  .ribbon{position:absolute;top:18px;right:-44px;transform:rotate(45deg);width:170px;text-align:center;
+    font-size:10.5px;font-weight:800;letter-spacing:.12em;padding:6px 0;color:#04101a;z-index:5;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+  .ribbon.rec{background:linear-gradient(90deg,var(--good),#7ef0c0)}
+  .ribbon.lux{background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+
+  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .opt-num{font-family:var(--serif);font-size:13px;color:var(--gold);letter-spacing:.2em;font-weight:600}
+  .card-route{font-size:20px;font-weight:800;margin:2px 0 0;line-height:1.15}
+  .card-route .small{font-size:12px;color:var(--muted);font-weight:500;display:block;margin-top:4px}
+  .score-ring{flex:none;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;position:relative}
+  .score-ring::before{content:"";position:absolute;inset:0;border-radius:50%;
+    background:conic-gradient(var(--ringc) calc(var(--p)*1%),rgba(255,255,255,.08) 0)}
+  .score-ring::after{content:"";position:absolute;inset:5px;border-radius:50%;background:#0a0e1c}
+  .score-ring span{position:relative;z-index:2;font-weight:800;font-size:17px}
+  .score-ring small{position:relative;z-index:2;font-size:9px;color:var(--faint);display:block;text-align:center;margin-top:-2px}
+
+  /* badges */
+  .badges{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 16px}
+  .badge{font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:5px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;border:1px solid transparent}
+  .badge.cx-low{background:rgba(86,224,160,.14);color:var(--good);border-color:rgba(86,224,160,.3)}
+  .badge.cx-medium{background:rgba(95,227,255,.12);color:var(--cyan-2);border-color:rgba(95,227,255,.28)}
+  .badge.cx-medhigh{background:rgba(255,180,84,.14);color:var(--warnv);border-color:rgba(255,180,84,.3)}
+  .badge.cx-high{background:rgba(255,107,133,.14);color:var(--bad);border-color:rgba(255,107,133,.32)}
+  .badge.warnbadge{background:rgba(255,180,84,.1);color:var(--warnv);border-color:rgba(255,180,84,.26)}
+  .badge.fromsfo{background:rgba(155,240,255,.1);color:var(--cyan-2);border-color:rgba(155,240,255,.25)}
+  .badge.pos{background:rgba(180,160,255,.12);color:#c9bcff;border-color:rgba(180,160,255,.3)}
+
+  /* meters */
+  .meters{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 16px}
+  .meter .meter-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .meter-name{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .meter-val{font-size:12px;font-weight:700;color:var(--ink)}
+  .dots{display:flex;gap:4px}
+  .dots i{flex:1;height:7px;border-radius:3px;background:rgba(255,255,255,.09)}
+  .dots i.on{background:linear-gradient(90deg,var(--gold),var(--gold-2));box-shadow:0 0 8px rgba(232,196,115,.4)}
+  .dots i.half{background:linear-gradient(90deg,var(--gold) 50%,rgba(255,255,255,.09) 50%)}
+  .risk i.on{background:linear-gradient(90deg,var(--bad),var(--warnv));box-shadow:0 0 8px rgba(255,107,133,.35)}
+
+  /* facts grid */
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:4px 0 18px;padding:14px;border-radius:14px;background:rgba(0,0,0,.22);border:1px solid var(--stroke)}
+  .fact .fk{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .fact .fv{font-size:13.5px;font-weight:700;margin-top:3px}
+  .fact .fv .sub{font-size:11px;color:var(--muted);font-weight:500}
+
+  /* ===== route timeline ===== */
+  .timeline{margin:6px 0 16px}
+  .tl-track{display:flex;align-items:center;gap:0}
+  .tl-node{display:flex;flex-direction:column;align-items:center;flex:none;width:62px}
+  .pill{font-weight:800;font-size:13px;letter-spacing:.06em;padding:7px 0;width:54px;text-align:center;border-radius:10px;
+    background:linear-gradient(180deg,var(--glass-2),var(--glass));border:1px solid var(--stroke-strong)}
+  .tl-node.origin .pill{border-color:rgba(95,227,255,.5);color:var(--cyan-2)}
+  .tl-node.dest .pill{border-color:rgba(232,196,115,.55);color:var(--gold-2)}
+  .tl-time{font-size:9.5px;color:var(--faint);margin-top:6px;text-align:center;line-height:1.3}
+  .tl-seg{flex:1;position:relative;height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:40px}
+  .tl-line{position:relative;width:100%;height:2px;border-radius:2px;
+    background:linear-gradient(90deg,rgba(95,227,255,.7),rgba(232,196,115,.7));overflow:visible}
+  .tl-line::before{content:"";position:absolute;top:-2.5px;left:0;width:30%;height:7px;border-radius:7px;
+    background:radial-gradient(circle,rgba(255,255,255,.9),transparent 70%);filter:blur(1px);
+    animation:fly 3.2s linear infinite}
+  @keyframes fly{0%{left:-15%;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:100%;opacity:0}}
+  .tl-plane{position:absolute;top:-9px;font-size:13px;filter:drop-shadow(0 0 4px rgba(95,227,255,.6))}
+  .tl-seg .seg-info{font-size:9px;color:var(--muted);margin-top:7px;text-align:center;white-space:nowrap}
+  .tl-seg .layover{position:absolute;top:-15px;font-size:9px;font-weight:700;color:var(--warnv);background:rgba(255,180,84,.1);padding:2px 7px;border-radius:999px;border:1px solid rgba(255,180,84,.25)}
+
+  /* expandable details */
+  .details{border-top:1px solid var(--stroke);margin-top:4px}
+  .details summary{list-style:none;cursor:pointer;padding:13px 2px 4px;display:flex;align-items:center;justify-content:space-between;
+    font-size:12.5px;font-weight:700;color:var(--cyan-2);letter-spacing:.04em}
+  .details summary::-webkit-details-marker{display:none}
+  .details summary .chev{transition:transform .3s;color:var(--gold)}
+  .details[open] summary .chev{transform:rotate(180deg)}
+  .details-body{font-size:13px;color:var(--muted);padding:8px 2px 6px;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .details-body p{margin:0 0 10px}
+  .details-body .seg-detail{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--stroke)}
+  .details-body .seg-detail:last-child{border-bottom:none}
+  .details-body .seg-detail .ic{color:var(--cyan)}
+  .details-body strong{color:var(--ink)}
+  .price-grid{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+  .price-tag{font-size:11.5px;font-weight:700;padding:6px 11px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke-strong)}
+  .price-tag b{color:var(--gold-2)}
+
+  .empty-state{text-align:center;color:var(--muted);padding:50px;border:1px dashed var(--stroke);border-radius:18px;background:var(--glass)}
+
+  /* ============================================================ RANKINGS */
+  .ranking-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .rank-card{position:relative;padding:22px 20px;border-radius:18px;background:linear-gradient(180deg,var(--glass-2),var(--glass));
+    border:1px solid var(--stroke);backdrop-filter:blur(14px);overflow:hidden;transition:transform .35s}
+  .rank-card:hover{transform:translateY(-5px)}
+  .rank-card .glow{position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;filter:blur(40px);opacity:.5}
+  .rank-tag{font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:800}
+  .rank-title{font-family:var(--serif);font-size:23px;font-weight:600;margin:8px 0 4px}
+  .rank-opt{font-size:12.5px;color:var(--gold-2);font-weight:700;margin-bottom:9px}
+  .rank-desc{font-size:13px;color:var(--muted)}
+  .rc-overall{--c:var(--good)} .rc-lux{--c:var(--gold)} .rc-fee{--c:var(--cyan)} .rc-sfo{--c:#9af0ff} .rc-risk{--c:var(--bad)}
+  .rank-card .rank-tag{color:var(--c)} .rank-card .glow{background:var(--c)}
+  .rank-card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c)}
+
+  /* ============================================================ MATRIX */
+  .matrix-scroll{overflow-x:auto;border-radius:16px;border:1px solid var(--stroke);background:rgba(0,0,0,.25)}
+  .matrix{width:100%;border-collapse:collapse;min-width:980px;font-size:13px}
+  .matrix thead th{position:sticky;top:0;z-index:2;background:rgba(14,18,34,.96);backdrop-filter:blur(10px);
+    text-align:left;padding:14px 14px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);
+    font-weight:700;border-bottom:1px solid var(--stroke-strong);white-space:nowrap}
+  .matrix tbody td{padding:14px 14px;border-bottom:1px solid var(--stroke);vertical-align:middle}
+  .matrix tbody tr{transition:background .2s}
+  .matrix tbody tr:hover{background:rgba(95,227,255,.05)}
+  .matrix tbody tr:last-child td{border-bottom:none}
+  .matrix .m-opt{font-weight:800;color:var(--ink)}
+  .matrix .m-route{font-weight:700;white-space:nowrap}
+  .matrix .mini-pill{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .matrix .m-score{font-weight:800}
+  .use-good{color:var(--good)} .use-mid{color:var(--warnv)} .use-low{color:var(--bad)}
+
+  /* ============================================================ CHECKLIST */
+  .checklist.glass{padding:24px;border-radius:18px;background:linear-gradient(180deg,var(--glass-2),var(--glass));border:1px solid var(--stroke);backdrop-filter:blur(14px)}
+  .check-list{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+  .check-list li{display:flex;gap:13px;font-size:14px;color:var(--muted);align-items:flex-start}
+  .check-list strong{color:var(--ink)}
+  .check-list code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:rgba(95,227,255,.1);color:var(--cyan-2);padding:2px 7px;border-radius:6px}
+  .chk{flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-weight:800;font-size:13px;
+    background:rgba(86,224,160,.15);color:var(--good);border:1px solid rgba(86,224,160,.3)}
+  .chk.warnchk{background:rgba(255,180,84,.15);color:var(--warnv);border-color:rgba(255,180,84,.3)}
+
+  /* ============================================================ FOOTER + TOAST */
+  .foot{margin-top:54px;padding-top:24px;border-top:1px solid var(--stroke);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+  .foot p{font-size:12px;color:var(--faint);margin:0;max-width:760px}
+  .back-top{color:var(--gold);text-decoration:none;font-size:13px;font-weight:600}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,30px);opacity:0;pointer-events:none;
+    background:rgba(10,14,26,.95);border:1px solid var(--gold);color:var(--gold-2);padding:13px 22px;border-radius:12px;
+    font-size:13.5px;font-weight:600;z-index:100;transition:.35s;box-shadow:0 20px 50px -10px rgba(0,0,0,.8)}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* ============================================================ RESPONSIVE */
+  @media(max-width:980px){
+    .stat-cards{grid-template-columns:repeat(2,1fr)}
+    .cards-grid{grid-template-columns:1fr}
+    .ranking-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:620px){
+    .wrap{padding:20px 14px 50px}
+    .stat-cards{grid-template-columns:1fr}
+    .ranking-grid{grid-template-columns:1fr}
+    .control-group.actions{margin-left:0;width:100%}
+    .control-group.actions .btn{flex:1}
+    .meters{grid-template-columns:1fr}
+    .controls{position:static}
+    .tl-node{width:50px}
+    .pill{width:46px;font-size:12px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  }
+
+  /* ============================================================ PRINT */
+  @media print{
+    body{background:#fff;color:#111}
+    .bg-aurora,.bg-grid,.controls,.toast,.back-top,.bg-aurora{display:none!important}
+    .card,.stat-card,.rank-card,.checklist.glass,.matrix-scroll{box-shadow:none;border:1px solid #ccc;background:#fff;break-inside:avoid}
+    .hero-title .from,.hero-title .to{color:#111!important;-webkit-text-fill-color:#111}
+    .hero-title .via{color:#111;text-shadow:none}
+    .details{display:block}
+    .details-body{display:block!important}
+    .section-head h2{color:#111}
+    *{color:#111!important;backdrop-filter:none!important}
+    .cards-grid{grid-template-columns:1fr}
+  }
+  </style>
+</head>
+<body>
+  <!-- Decorative animated aurora background -->
+  <div class="bg-aurora" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <main class="wrap">
+
+    <!-- ============ 1. HERO / SUMMARY ============ -->
+    <header class="hero" id="top">
+      <div class="hero-kicker">
+        <span class="dot"></span> AWARD TRAVEL INTELLIGENCE · CHASE ULTIMATE REWARDS
+      </div>
+      <h1 class="hero-title">
+        <span class="from">SFO / SEA</span>
+        <span class="arrow">→</span>
+        <span class="via">Europe</span>
+        <span class="arrow">→</span>
+        <span class="to">Podgorica</span>
+      </h1>
+      <p class="hero-sub">Business class award options, onward connection risk, and best-value routing analysis.</p>
+
+      <div class="stat-cards">
+        <article class="stat-card">
+          <div class="stat-ic">✦</div>
+          <div class="stat-label">Best Luxury Cabin</div>
+          <div class="stat-value">Air France A350 Business</div>
+          <div class="stat-meta">Options 2 &amp; 5 · 4.7 / 5</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-ic">⬇</div>
+          <div class="stat-label">Best Low-Fee Long-Haul</div>
+          <div class="stat-value">SEA → MUC · Lufthansa</div>
+          <div class="stat-meta">via Aeroplan · 75k + $76</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-ic">★</div>
+          <div class="stat-label">Best From SFO</div>
+          <div class="stat-value">SFO → CDG → ZRH / GVA</div>
+          <div class="stat-meta">Air France · no positioning</div>
+        </article>
+        <article class="stat-card warn">
+          <div class="stat-ic">⚠</div>
+          <div class="stat-label">Most Complex</div>
+          <div class="stat-value">SEA → MUC → IST</div>
+          <div class="stat-meta">+ IST hotel + next-day TGD</div>
+        </article>
+      </div>
+    </header>
+
+    <!-- ============ 6. FILTER / SORT CONTROLS ============ -->
+    <section class="controls" id="controls" aria-label="Sort and filter controls">
+      <div class="controls-row">
+        <div class="control-group">
+          <label for="sortBy" class="control-label">Sort by</label>
+          <div class="select-wrap">
+            <select id="sortBy" aria-label="Sort options by">
+              <option value="overall">Overall score</option>
+              <option value="miles">Lowest miles</option>
+              <option value="fees">Lowest fees</option>
+              <option value="cabin">Best cabin quality</option>
+              <option value="complexity">Least complexity</option>
+            </select>
+          </div>
+        </div>
+        <div class="control-group toggles">
+          <label class="toggle">
+            <input type="checkbox" id="onlySFO" />
+            <span class="track"></span>
+            <span class="toggle-text">Only starts from SFO</span>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="onlyPremium" />
+            <span class="track"></span>
+            <span class="toggle-text">Only 100% business</span>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="onlySEApos" />
+            <span class="track"></span>
+            <span class="toggle-text">Only SEA positioning</span>
+          </label>
+        </div>
+        <div class="control-group actions">
+          <button class="btn ghost" id="copyBtn" type="button">⧉ Copy summary</button>
+          <button class="btn ghost" id="printBtn" type="button">⎙ Print / PDF</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2 + 3. INTERACTIVE FLIGHT CARDS (with route timelines) ============ -->
+    <section aria-label="Flight option cards">
+      <div class="section-head">
+        <h2>Flight Options</h2>
+        <span class="count-pill" id="countPill">5 options</span>
+      </div>
+      <div class="cards-grid" id="cardsGrid"></div>
+      <div class="empty-state" id="emptyState" hidden>No options match the current filters. <button class="link-btn" id="resetFilters" type="button">Reset filters</button></div>
+    </section>
+
+    <!-- ============ 5. RANKING SECTION ============ -->
+    <section aria-label="Rankings">
+      <div class="section-head">
+        <h2>Rankings &amp; Verdicts</h2>
+      </div>
+      <div class="ranking-grid" id="rankingGrid"></div>
+    </section>
+
+    <!-- ============ 4. COMPARISON MATRIX ============ -->
+    <section aria-label="Comparison matrix">
+      <div class="section-head">
+        <h2>Comparison Matrix</h2>
+        <span class="count-pill subtle">scroll horizontally on mobile →</span>
+      </div>
+      <div class="matrix-scroll">
+        <table class="matrix" id="matrix">
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Route</th>
+              <th>Starts</th>
+              <th>Long-haul airline</th>
+              <th>Aircraft</th>
+              <th>Award</th>
+              <th>Cash fees</th>
+              <th>Total time</th>
+              <th>Cabin</th>
+              <th>TGD usefulness</th>
+              <th>Complexity</th>
+              <th>Verdict</th>
+            </tr>
+          </thead>
+          <tbody id="matrixBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ BEFORE BOOKING CHECKLIST ============ -->
+    <section class="checklist-section" aria-label="Before booking checklist">
+      <div class="section-head">
+        <h2>Before You Book</h2>
+        <span class="count-pill subtle">verify everything</span>
+      </div>
+      <div class="checklist glass">
+        <ul class="check-list">
+          <li><span class="chk">✓</span> Confirm the transatlantic long-haul segment is <strong>actually business class</strong> (not a marketing fare bucket).</li>
+          <li><span class="chk warnchk">!</span> Watch for <strong>mixed-cabin</strong> tickets — especially <strong>Option 1 (60k)</strong> and <strong>Option 3 (78% premium)</strong>.</li>
+          <li><span class="chk warnchk">!</span> Verify the <strong>Lufthansa A350 seat map: Allegris vs legacy</strong> business (Options 3 &amp; 4). This swings cabin quality from ~3.2 to ~4.6.</li>
+          <li><span class="chk">✓</span> Check separate onward flights for your date: <code>MUC→TGD</code>, <code>ZRH→TGD</code>, <code>GVA→TGD</code>, <code>IST→TGD</code>, and <code>Europe→BEG</code> as a backup.</li>
+          <li><span class="chk">✓</span> Avoid risky separate-ticket connections — a missed onward leg won't be protected.</li>
+          <li><span class="chk">✓</span> For separate tickets: leave <strong>4–6+ hours</strong> if same airport / carry-on only; go <strong>overnight</strong> if checking bags, switching airports, or positioning.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p>Static analysis dashboard · no live availability · pricing &amp; seats reflect the snapshot provided. Always re-verify before booking. <strong>TGD = Podgorica</strong>.</p>
+      <a class="back-top" href="#top">↑ Back to top</a>
+    </footer>
+  </main>
+
+  <!-- Toast for copy confirmation -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+  /* ============================================================================
+     ✦ FLIGHT DATA — EDIT HERE TO ADD / CHANGE OPTIONS
+     ----------------------------------------------------------------------------
+     Each object is one award option. To add another option, copy a block and
+     append it to the FLIGHTS array. Fields used by the UI:
+       id          : number (also shown as "Option N")
+       route       : array of airport codes [origin, ...connections, dest]
+       startsFrom  : "SFO" | "SEA"
+       positioning : true if you must position to SEA first
+       longHaulAirline / longHaulProduct : strings for display
+       depart/arrive : {airport,date,time}
+       totalTime   : display string ; totalMinutes : number (used for sorting)
+       segments[]  : flight legs and layovers (layover:true marks a layover)
+       miles       : business-award miles (used for the "lowest miles" sort)
+       milesAlt    : optional secondary award price
+       fees        : business cash fee in USD (used for "lowest fees" sort)
+       pricing[]   : {cabin,miles,fee} rows shown in expandable details
+       seats       : display string
+       premiumPct  : 100 | number | null  (null = unverified -> excluded from "100% business")
+       cabin       : numeric cabin score used for sorting (midpoint if a range)
+       cabinHi/cabinLo : optional range endpoints for display
+       cabinLabel  : short text label
+       practicality: x/5
+       complexity  : "Low" | "Medium" | "Medium-High" | "High"
+       overall     : 0-100 headline score (AS SUPPLIED — not reverse-derived)
+       onward      : {city, score (1-5), note}
+       warnings[]  : warning badge strings
+       ribbon      : "rec" | "lux" | null
+       verdict     : one-line matrix verdict
+       takeaway    : longer paragraph for details
+     ============================================================================ */
+  const FLIGHTS = [
+    {
+      id:1, route:["SFO","FCO","MUC"], startsFrom:"SFO", positioning:false,
+      longHaulAirline:"United (Polaris)", longHaulProduct:"United Polaris",
+      depart:{airport:"SFO",date:"Mon 06/15",time:"4:55 PM"},
+      arrive:{airport:"MUC",date:"Tue 06/16",time:"6:15 PM"},
+      totalTime:"16h 20m", totalMinutes:980,
+      segments:[
+        {from:"SFO",to:"FCO",airline:"United",flightNo:"UA507",aircraft:"Boeing 777-200/300",duration:"11h 45m",longhaul:true},
+        {layover:true,airport:"FCO",duration:"3h 00m"},
+        {from:"FCO",to:"MUC",airline:"ITA Airways",flightNo:"AZ436",aircraft:"Airbus A320neo",duration:"1h 35m"}
+      ],
+      miles:60000, milesAlt:90000, fees:97.81,
+      pricing:[{cabin:"Award (low)",miles:"60k",fee:"$97.81"},{cabin:"Award (high)",miles:"90k",fee:"$97.81"}],
+      seats:"8+ seats", premiumPct:null,
+      cabin:4.0, cabinLabel:"United Polaris · solid lie-flat",
+      practicality:3.8, complexity:"Medium", overall:82,
+      onward:{city:"Munich",score:3.5,note:"Decent hub; verify direct MUC→TGD for your date."},
+      warnings:["Verify Mixed Cabin","Onward TGD ticket required"],
+      ribbon:null,
+      verdict:"Strong low-fee pick if the long-haul is truly Polaris business.",
+      takeaway:"Strong low-fee option and good if the long-haul is genuinely Polaris business. Slightly longer total itinerary, and you'll still need a separate Munich→TGD (or →BEG) leg. Polaris is reliable and comfortable but not as luxurious as the Air France A350."
+    },
+    {
+      id:2, route:["SFO","CDG","GVA"], startsFrom:"SFO", positioning:false,
+      longHaulAirline:"Air France", longHaulProduct:"Air France A350-900 Business",
+      depart:{airport:"SFO",date:"Mon 06/15",time:"10:30 PM"},
+      arrive:{airport:"GVA",date:"Tue 06/16",time:"9:55 PM"},
+      totalTime:"14h 25m", totalMinutes:865,
+      segments:[
+        {from:"SFO",to:"CDG",airline:"Air France",flightNo:"AF0085",aircraft:"Airbus A350-900",duration:"10h 40m",longhaul:true},
+        {layover:true,airport:"CDG",duration:"2h 35m"},
+        {from:"CDG",to:"GVA",airline:"Air France",flightNo:"AF1242",aircraft:"Airbus A220-300",duration:"1h 10m"}
+      ],
+      miles:60000, fees:363.90,
+      pricing:[{cabin:"Economy",miles:"50.5k",fee:"$156"},{cabin:"Premium Econ.",miles:"90k",fee:"$248.40"},{cabin:"Business",miles:"60k",fee:"$363.90"}],
+      seats:"3+ business seats", premiumPct:100,
+      cabin:4.7, cabinLabel:"Air France A350 · excellent",
+      practicality:4.3, complexity:"Medium", overall:88,
+      onward:{city:"Geneva",score:2.8,note:"Less convenient than Zurich/Munich for TGD; check next-day options."},
+      warnings:["Higher cash fees","Onward TGD ticket required"],
+      ribbon:"lux",
+      verdict:"Best cabin + no positioning; Geneva is the weak link for TGD.",
+      takeaway:"Strongest from SFO with no positioning flight and an excellent, modern Air France A350 business cabin. Fast itinerary. Higher cash fees, and the main concern is whether Geneva is actually useful for getting to Podgorica."
+    },
+    {
+      id:3, route:["SEA","MUC","IST"], startsFrom:"SEA", positioning:true,
+      longHaulAirline:"Lufthansa", longHaulProduct:"Lufthansa A350-900 Business",
+      depart:{airport:"SEA",date:"Tue 06/16",time:"6:50 PM"},
+      arrive:{airport:"IST",date:"Wed 06/17",time:"8:05 PM"},
+      totalTime:"15h 15m", totalMinutes:915,
+      segments:[
+        {from:"SEA",to:"MUC",airline:"Lufthansa",flightNo:"LH489",aircraft:"Airbus A350-900",duration:"9h 50m",longhaul:true},
+        {layover:true,airport:"MUC",duration:"2h 45m"},
+        {from:"MUC",to:"IST",airline:"Turkish Airlines",flightNo:"TK1634",aircraft:"Airbus A321neo",duration:"2h 40m"}
+      ],
+      miles:88000, fees:40.80,
+      pricing:[{cabin:"Economy",miles:"44k",fee:"$40.80"},{cabin:"Business",miles:"88k",fee:"$40.80"}],
+      seats:"1+ business seat", premiumPct:78,
+      cabin:3.9, cabinLo:3.2, cabinHi:4.6, cabinLabel:"Lufthansa A350 · Allegris?",
+      practicality:2.8, complexity:"High", overall:68,
+      onward:{city:"Istanbul",score:4.2,note:"Strong Balkan connectivity, but likely needs an IST hotel + next-day IST→TGD."},
+      warnings:["Verify Mixed Cabin","Verify Seat Map (Allegris vs legacy)","SEA positioning required","IST hotel likely","Next-day onward ticket"],
+      ribbon:null,
+      verdict:"Most complex; only worth it if IST→TGD is perfect.",
+      takeaway:"The most complex option. 88k is expensive vs the 60k Air France fares, and the 78% premium flag means it may not be fully business across all segments. Istanbul has great Balkan connectivity, but you'd position to SEA, likely overnight in Istanbul, then fly a separate IST→TGD. Not the favorite unless it solves Podgorica dramatically better."
+    },
+    {
+      id:4, route:["SEA","MUC"], startsFrom:"SEA", positioning:true,
+      longHaulAirline:"Lufthansa", longHaulProduct:"Lufthansa A350-900 Business",
+      depart:{airport:"SEA",date:"Tue 06/16",time:"6:50 PM"},
+      arrive:{airport:"MUC",date:"Wed 06/17",time:"1:40 PM"},
+      totalTime:"9h 50m", totalMinutes:590,
+      segments:[
+        {from:"SEA",to:"MUC",airline:"Lufthansa",flightNo:"LH489",aircraft:"Airbus A350-900",duration:"9h 50m",longhaul:true,nonstop:true}
+      ],
+      miles:75000, fees:76.31,
+      pricing:[{cabin:"Economy",miles:"42.5k",fee:"$76.31"},{cabin:"Business",miles:"75k",fee:"$76.31"}],
+      seats:"1+ business seat", premiumPct:100,
+      cabin:3.9, cabinLo:3.2, cabinHi:4.6, cabinLabel:"Lufthansa A350 · Allegris?",
+      practicality:3.6, complexity:"Medium-High", overall:78,
+      onward:{city:"Munich",score:3.5,note:"Good hub; verify exact MUC→TGD availability."},
+      warnings:["Verify Seat Map (Allegris vs legacy)","SEA positioning required","Onward TGD ticket required"],
+      ribbon:null,
+      verdict:"Best clean nonstop deal if you'll position to SEA.",
+      takeaway:"The best clean long-haul deal if you're okay positioning to SEA — 75k + $76 for nonstop business to Europe is excellent value. Downsides: getting to Seattle first, then solving Munich→Podgorica. Cabin quality hinges entirely on whether this aircraft is Allegris or legacy Lufthansa business."
+    },
+    {
+      id:5, route:["SFO","CDG","ZRH"], startsFrom:"SFO", positioning:false,
+      longHaulAirline:"Air France", longHaulProduct:"Air France A350-900 Business",
+      depart:{airport:"SFO",date:"Mon 06/15",time:"10:30 PM"},
+      arrive:{airport:"ZRH",date:"Tue 06/16",time:"10:25 PM"},
+      totalTime:"14h 55m", totalMinutes:895,
+      segments:[
+        {from:"SFO",to:"CDG",airline:"Air France",flightNo:"AF0085",aircraft:"Airbus A350-900",duration:"10h 40m",longhaul:true},
+        {layover:true,airport:"CDG",duration:"2h 55m"},
+        {from:"CDG",to:"ZRH",airline:"Air France",flightNo:"AF1414",aircraft:"Airbus A220-300",duration:"1h 20m"}
+      ],
+      miles:60000, fees:363.90,
+      pricing:[{cabin:"Economy",miles:"53k",fee:"$156"},{cabin:"Premium Econ.",miles:"103.5k",fee:"$248.40"},{cabin:"Business",miles:"60k",fee:"$363.90"}],
+      seats:"2+ business seats", premiumPct:100,
+      cabin:4.7, cabinLabel:"Air France A350 · excellent",
+      practicality:4.4, complexity:"Medium", overall:90,
+      onward:{city:"Zurich",score:3.6,note:"Likely a better onward hub than Geneva; still verify ZRH→TGD/BEG."},
+      warnings:["Higher cash fees","Onward TGD ticket required"],
+      ribbon:"rec",
+      verdict:"Top pick: excellent cabin, from SFO, Zurich beats Geneva.",
+      takeaway:"One of the best options overall: the same excellent Air France A350 long-haul, starting from SFO, with Zurich likely more useful than Geneva for onward travel. Slightly longer than the Geneva routing and higher fees, but 60k in business is very strong."
+    }
+  ];
+
+  /* ============================================================================
+     SCORING NOTE
+     The headline `overall` (0-100) is used AS SUPPLIED for ranking and the score
+     ring — it is NOT reverse-engineered from cabin/practicality so the number
+     stays honest to the manual analysis. If you'd rather compute it, replace the
+     `o.overall` reads with a formula like:
+         Math.round((cabin/5*45) + (practicality/5*35) + ((4-cxRank)/3*20))
+     and tune the weights. The component meters below still render cabin + risk.
+     ============================================================================ */
+  const CX_RANK = {"Low":1,"Medium":2,"Medium-High":2.5,"High":3};      // for least-complexity sort
+  const CX_RISK = {"Low":1,"Medium":2,"Medium-High":3,"High":4};         // 1-4 risk meter (out of 4)
+  const CX_CLASS = {"Low":"cx-low","Medium":"cx-medium","Medium-High":"cx-medhigh","High":"cx-high"};
+
+  /* ---------- helpers ---------- */
+  const $ = (s,el=document)=>el.querySelector(s);
+  const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+  const fmtMiles = m => (m/1000)+"k";
+  const fmtFee = f => "$"+f.toFixed(2);
+  const ringColor = s => s>=85?"var(--good)":s>=75?"var(--cyan)":s>=70?"var(--gold)":"var(--bad)";
+  const useClass = s => s>=3.6?"use-good":s>=3.0?"use-mid":"use-low";
+  const useLabel = s => s>=4.0?"Excellent":s>=3.4?"Good":s>=3.0?"Fair":"Weak";
+
+  // 5-dot meter (supports half dots)
+  function dots(score,cls=""){
+    let h=`<div class="dots ${cls}">`;
+    for(let i=1;i<=5;i++){
+      const cl = score>=i?"on":(score>=i-0.5?"half":"");
+      h+=`<i class="${cl}"></i>`;
+    }
+    return h+"</div>";
+  }
+  // risk meter out of 4
+  function riskDots(n){
+    let h='<div class="dots risk">';
+    for(let i=1;i<=4;i++) h+=`<i class="${n>=i?"on":""}"></i>`;
+    return h+"</div>";
+  }
+
+  function cabinDisplay(o){
+    return o.cabinLo ? `${o.cabinLo}–${o.cabinHi} / 5` : `${o.cabin.toFixed(1)} / 5`;
+  }
+
+  /* ---------- route timeline ---------- */
+  function timelineHTML(o){
+    const nodes = o.route;
+    const flightSegs = o.segments.filter(s=>!s.layover);
+    const layovers = o.segments.filter(s=>s.layover);
+    let parts = [];
+    for(let i=0;i<nodes.length;i++){
+      const role = i===0?"origin":(i===nodes.length-1?"dest":"mid");
+      const t = i===0 ? `${o.depart.time}<br>${o.depart.date}`
+              : (i===nodes.length-1 ? `${o.arrive.time}<br>${o.arrive.date}` : "connect");
+      parts.push(`<div class="tl-node ${role}"><span class="pill">${nodes[i]}</span><span class="tl-time">${t}</span></div>`);
+      if(i<nodes.length-1){
+        const seg = flightSegs[i];
+        const lay = layovers.find(l=>l.airport===nodes[i]);
+        const layHTML = lay?`<span class="layover">⏱ ${lay.duration}</span>`:"";
+        parts.push(
+          `<div class="tl-seg">${layHTML}
+             <div class="tl-line"><span class="tl-plane">✈</span></div>
+             <span class="seg-info">${seg?seg.airline.split(" ")[0]:""} · ${seg?seg.duration:""}</span>
+           </div>`);
+      }
+    }
+    return `<div class="timeline"><div class="tl-track">${parts.join("")}</div></div>`;
+  }
+
+  /* ---------- flight card ---------- */
+  function cardHTML(o){
+    const cxClass = CX_CLASS[o.complexity];
+    const ribbon = o.ribbon==="rec" ? `<div class="ribbon rec">★ RECOMMENDED</div>`
+                 : o.ribbon==="lux" ? `<div class="ribbon lux">✦ LUXURY WINNER</div>` : "";
+    const warnBadges = o.warnings.map(w=>`<span class="badge warnbadge">⚠ ${w}</span>`).join("");
+    const fromBadge = o.startsFrom==="SFO" ? `<span class="badge fromsfo">◎ From SFO</span>` : "";
+    const posBadge = o.positioning ? `<span class="badge pos">⤴ SEA positioning</span>` : "";
+
+    const segDetails = o.segments.map(s=>{
+      if(s.layover) return `<div class="seg-detail"><span class="ic">⏱</span><div><strong>Layover · ${s.airport}</strong><br>${s.duration}</div></div>`;
+      return `<div class="seg-detail"><span class="ic">✈</span><div><strong>${s.from} → ${s.to}</strong> · ${s.airline} ${s.flightNo}${s.nonstop?" · nonstop":""}<br>${s.aircraft} · ${s.duration}${s.longhaul?" · <em>long-haul</em>":""}</div></div>`;
+    }).join("");
+
+    const priceTags = o.pricing.map(p=>`<span class="price-tag">${p.cabin}: <b>${p.miles}</b> + ${p.fee}</span>`).join("");
+    const premiumTxt = o.premiumPct===100?"100% business shown":(o.premiumPct?`${o.premiumPct}% premium shown`:"premium % not confirmed");
+
+    return `
+    <article class="card" tabindex="0" data-id="${o.id}"
+        style="--seg1:${o.startsFrom==='SFO'?'rgba(95,227,255,.5)':'rgba(180,160,255,.5)'};--seg2:rgba(232,196,115,.45)">
+      ${ribbon}
+      <div class="card-top">
+        <div>
+          <div class="opt-num">OPTION ${o.id}</div>
+          <h3 class="card-route">${o.route.join(" → ")}
+            <span class="small">${o.longHaulProduct} · ${o.depart.date} ${o.depart.time} → ${o.arrive.date} ${o.arrive.time}</span>
+          </h3>
+        </div>
+        <div class="score-ring" style="--p:${o.overall};--ringc:${ringColor(o.overall)}" title="Overall ${o.overall}/100">
+          <span>${o.overall}<small>/100</small></span>
+        </div>
+      </div>
+
+      <div class="badges">
+        <span class="badge ${cxClass}">${o.complexity==="High"?"⛔":o.complexity==="Low"?"✓":"●"} ${o.complexity} complexity</span>
+        ${fromBadge}${posBadge}${warnBadges}
+      </div>
+
+      ${timelineHTML(o)}
+
+      <div class="meters">
+        <div class="meter">
+          <div class="meter-top"><span class="meter-name">Cabin quality</span><span class="meter-val">${cabinDisplay(o)}</span></div>
+          ${dots(o.cabin)}
+        </div>
+        <div class="meter">
+          <div class="meter-top"><span class="meter-name">Risk / complexity</span><span class="meter-val">${o.complexity}</span></div>
+          ${riskDots(CX_RISK[o.complexity])}
+        </div>
+        <div class="meter">
+          <div class="meter-top"><span class="meter-name">Practicality</span><span class="meter-val">${o.practicality.toFixed(1)} / 5</span></div>
+          ${dots(o.practicality)}
+        </div>
+        <div class="meter">
+          <div class="meter-top"><span class="meter-name">TGD usefulness</span><span class="meter-val ${useClass(o.onward.score)}">${useLabel(o.onward.score)}</span></div>
+          ${dots(o.onward.score)}
+        </div>
+      </div>
+
+      <div class="facts">
+        <div class="fact"><div class="fk">Award (business)</div><div class="fv">${fmtMiles(o.miles)} <span class="sub">+ ${fmtFee(o.fees)}</span></div></div>
+        <div class="fact"><div class="fk">Total time</div><div class="fv">${o.totalTime}</div></div>
+        <div class="fact"><div class="fk">Seats</div><div class="fv">${o.seats}</div></div>
+      </div>
+
+      <details class="details">
+        <summary>More details <span class="chev">▾</span></summary>
+        <div class="details-body">
+          <p>${o.takeaway}</p>
+          <div class="price-grid">${priceTags}</div>
+          <p style="color:var(--faint);font-size:11.5px;margin-bottom:14px">${premiumTxt} · onward city: <strong style="color:var(--ink)">${o.onward.city}</strong> — ${o.onward.note}</p>
+          ${segDetails}
+        </div>
+      </details>
+    </article>`;
+  }
+
+  /* ---------- matrix row ---------- */
+  function matrixRowHTML(o){
+    const cxClass = CX_CLASS[o.complexity];
+    return `<tr data-id="${o.id}">
+      <td class="m-opt">#${o.id}${o.ribbon==="rec"?' <span class="mini-pill" style="background:rgba(86,224,160,.15);color:var(--good)">★</span>':''}</td>
+      <td class="m-route">${o.route.join(" → ")}</td>
+      <td>${o.startsFrom}${o.positioning?' <span style="color:var(--faint)">(pos.)</span>':''}</td>
+      <td>${o.longHaulAirline}</td>
+      <td>${o.segments.find(s=>s.longhaul).aircraft}</td>
+      <td><b style="color:var(--gold-2)">${fmtMiles(o.miles)}</b></td>
+      <td>${fmtFee(o.fees)}</td>
+      <td>${o.totalTime}</td>
+      <td>${cabinDisplay(o)}</td>
+      <td class="${useClass(o.onward.score)}">${o.onward.city} · ${useLabel(o.onward.score)}</td>
+      <td><span class="mini-pill ${cxClass}">${o.complexity}</span></td>
+      <td><span class="m-score" style="color:${ringColor(o.overall)}">${o.overall}</span> · ${o.verdict}</td>
+    </tr>`;
+  }
+
+  /* ---------- rankings (curated) ---------- */
+  const RANKINGS = [
+    {cls:"rc-overall",tag:"Best Overall So Far",title:"SFO → CDG → ZRH",opt:"Option 5 · 90/100",
+     desc:"Excellent Air France A350 business, starts from SFO, 60k is superb, and Zurich likely beats Geneva for onward travel. Only knock: $363.90 fees."},
+    {cls:"rc-lux",tag:"Best Business Class Luxury",title:"Air France A350-900",opt:"Options 2 & 5 · 4.7/5",
+     desc:"The most premium-feeling cabin in the set — modern, polished, and more luxurious than United Polaris or legacy Lufthansa. The pick if comfort matters most."},
+    {cls:"rc-fee",tag:"Best Low-Fee Deal",title:"SEA → MUC nonstop",opt:"Option 4 · 75k + $76",
+     desc:"Cleanest value: nonstop business to Europe for 75k and only $76 cash. (Note: Option 3 has the lowest raw cash fee at $40.80, but 88k miles and high complexity sink it.)"},
+    {cls:"rc-sfo",tag:"Easiest From SFO",title:"SFO → CDG → ZRH / GVA",opt:"Options 5 & 2",
+     desc:"No positioning, top cabin, fast itineraries straight out of San Francisco. Option 5 edges ahead on onward usefulness."},
+    {cls:"rc-risk",tag:"Most Risky / Complex",title:"SEA → MUC → IST",opt:"Option 3 · 68/100",
+     desc:"SEA positioning + likely Istanbul hotel + separate next-day IST→TGD, at 88k with a 78% premium flag. Only worth it if Istanbul→Podgorica is dramatically better."}
+  ];
+  function rankCardHTML(r){
+    return `<article class="rank-card ${r.cls}">
+      <div class="glow"></div>
+      <div class="rank-tag">${r.tag}</div>
+      <div class="rank-title">${r.title}</div>
+      <div class="rank-opt">${r.opt}</div>
+      <p class="rank-desc">${r.desc}</p>
+    </article>`;
+  }
+
+  /* ============================================================================
+     RENDER + STATE
+     ============================================================================ */
+  const state = { sort:"overall", onlySFO:false, onlyPremium:false, onlySEApos:false };
+
+  function applySortFilter(list){
+    let out = list.filter(o=>{
+      if(state.onlySFO && o.startsFrom!=="SFO") return false;
+      if(state.onlyPremium && o.premiumPct!==100) return false;
+      if(state.onlySEApos && !o.positioning) return false;
+      return true;
+    });
+    const cmp = {
+      overall:(a,b)=>b.overall-a.overall,
+      miles:(a,b)=>a.miles-b.miles || a.fees-b.fees,
+      fees:(a,b)=>a.fees-b.fees || a.miles-b.miles,
+      cabin:(a,b)=>b.cabin-a.cabin || b.overall-a.overall,
+      complexity:(a,b)=>CX_RANK[a.complexity]-CX_RANK[b.complexity] || b.overall-a.overall
+    }[state.sort];
+    return out.sort(cmp);
+  }
+
+  function render(){
+    const list = applySortFilter(FLIGHTS);
+    const grid = $("#cardsGrid"), empty = $("#emptyState");
+    grid.innerHTML = list.map(cardHTML).join("");
+    $("#matrixBody").innerHTML = applySortFilter(FLIGHTS).map(matrixRowHTML).join("");
+    $("#countPill").textContent = `${list.length} option${list.length!==1?"s":""}`;
+    empty.hidden = list.length!==0;
+    grid.style.display = list.length? "" : "none";
+  }
+
+  /* ---------- copy summary ---------- */
+  function buildSummary(){
+    const list = applySortFilter(FLIGHTS);
+    const sortName = {overall:"overall score",miles:"lowest miles",fees:"lowest fees",cabin:"best cabin quality",complexity:"least complexity"}[state.sort];
+    const lines = [
+      "SFO / SEA → Europe → Podgorica (TGD) — Award Flight Comparison",
+      `Ranked by ${sortName}${state.onlySFO?" · only-from-SFO":""}${state.onlyPremium?" · only-100%-business":""}${state.onlySEApos?" · only-SEA-positioning":""}`,
+      "".padEnd(60,"-")
+    ];
+    list.forEach((o,i)=>{
+      lines.push(
+        `${i+1}. Option ${o.id}: ${o.route.join(" → ")}  [${o.overall}/100]`,
+        `   ${o.longHaulProduct} · ${o.totalTime} · ${fmtMiles(o.miles)} + ${fmtFee(o.fees)} · ${o.seats}`,
+        `   Cabin ${cabinDisplay(o)} · Complexity ${o.complexity} · Onward ${o.onward.city} (${useLabel(o.onward.score)})`,
+        `   Verdict: ${o.verdict}`
+      );
+    });
+    lines.push("".padEnd(60,"-"),"Reminder: re-verify business cabin, mixed-cabin, Lufthansa seat map (Allegris vs legacy), and onward TGD/BEG availability before booking.");
+    return lines.join("\n");
+  }
+  function toast(msg){
+    const t=$("#toast"); t.textContent=msg; t.classList.add("show");
+    clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove("show"),2400);
+  }
+  async function copySummary(){
+    const text = buildSummary();
+    try{ await navigator.clipboard.writeText(text); toast("✓ Ranked summary copied to clipboard"); }
+    catch(e){
+      const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy"); toast("✓ Summary copied"); }catch(_){ toast("Couldn't copy — check permissions"); }
+      ta.remove();
+    }
+  }
+
+  /* ---------- wire up ---------- */
+  function init(){
+    $("#rankingGrid").innerHTML = RANKINGS.map(rankCardHTML).join("");
+    render();
+    $("#sortBy").addEventListener("change",e=>{state.sort=e.target.value;render();});
+    $("#onlySFO").addEventListener("change",e=>{state.onlySFO=e.target.checked;render();});
+    $("#onlyPremium").addEventListener("change",e=>{state.onlyPremium=e.target.checked;render();});
+    $("#onlySEApos").addEventListener("change",e=>{state.onlySEApos=e.target.checked;render();});
+    $("#copyBtn").addEventListener("click",copySummary);
+    $("#printBtn").addEventListener("click",()=>window.print());
+    $("#resetFilters").addEventListener("click",()=>{
+      state.onlySFO=state.onlyPremium=state.onlySEApos=false;
+      $("#onlySFO").checked=$("#onlyPremium").checked=$("#onlySEApos").checked=false;
+      render();
+    });
+    // keyboard: Enter/Space on a card toggles its details
+    $("#cardsGrid").addEventListener("keydown",e=>{
+      if((e.key==="Enter"||e.key===" ") && e.target.classList.contains("card")){
+        const d=$(".details",e.target); if(d){ d.open=!d.open; e.preventDefault(); }
+      }
+    });
+  }
+  document.addEventListener("DOMContentLoaded",init);
+  </script>
+</body>
+</html>

@@ -129,6 +129,17 @@ input[type=number]:focus{border-color:rgba(255,138,61,.72);box-shadow:0 0 0 4px 
   background:transparent;box-shadow:none
 }
 .segment button.active{color:#140b05;background:linear-gradient(135deg,var(--glow2),var(--glow))}
+.mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 18px}
+.mode-switch button{text-align:left;justify-content:center;padding:13px 12px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid var(--line);box-shadow:none;color:var(--text)}
+.mode-switch button.active{color:#140b05;background:linear-gradient(135deg,var(--glow2),var(--glow))}
+.recipe-toggle{display:grid;gap:10px;margin-bottom:18px}
+.recipe-card{
+  padding:15px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.04);
+  color:var(--text);box-shadow:none;text-align:left;display:block
+}
+.recipe-card strong{display:block;font-size:1rem;margin-bottom:4px}
+.recipe-card span{display:block;color:var(--muted);font-size:.86rem;line-height:1.35}
+.recipe-card.active{border-color:rgba(255,138,61,.7);background:linear-gradient(135deg,rgba(255,208,138,.22),rgba(255,138,61,.12));box-shadow:0 16px 44px rgba(255,138,61,.12)}
 input[type=range]{width:100%;accent-color:var(--glow);margin:22px 0 14px}
 .presets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 18px}
 .presets button{padding:12px;border-radius:15px;background:rgba(255,255,255,.07);border:1px solid var(--line);box-shadow:none;color:var(--text)}
@@ -148,20 +159,23 @@ input[type=range]{width:100%;accent-color:var(--glow);margin:22px 0 14px}
 .ingredient b{display:block;font-size:clamp(1.7rem,4vw,3.1rem);letter-spacing:-.06em;margin:8px 0 3px}
 .ingredient span{color:var(--muted)}
 .meat-split{padding:20px}
-.meat-row{display:grid;grid-template-columns:110px 1fr auto;gap:14px;align-items:center;margin:14px 0}
+.meat-row{display:grid;grid-template-columns:130px 1fr auto;gap:14px;align-items:center;margin:14px 0}
 .bar{height:12px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
 .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--red),var(--glow));width:0;transition:width .35s ease}
-.amount{font-weight:900;color:var(--glow2)}
+.amount{font-weight:900;color:var(--glow2);text-align:right}
 .garlic{padding:22px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
-.garlic h2,.timeline h2,.shopping h2{margin:0 0 8px;font-size:1.35rem;letter-spacing:-.03em}
-.garlic p,.shopping p{margin:0;color:var(--muted);line-height:1.55}
+.garlic h2,.timeline h2,.shopping h2,.profile h2{margin:0 0 8px;font-size:1.35rem;letter-spacing:-.03em}
+.garlic p,.shopping p,.profile p{margin:0;color:var(--muted);line-height:1.55}
 .badge{
   min-width:120px;text-align:center;border:1px solid var(--line);border-radius:24px;
   padding:16px;background:rgba(255,255,255,.06)
 }
 .badge b{display:block;font-size:2rem;letter-spacing:-.05em}
 .badge span{color:var(--muted);font-size:.8rem}
-.timeline,.shopping{padding:22px}
+.profile,.timeline,.shopping{padding:22px}
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.profile-stat{border:1px solid var(--line);border-radius:16px;padding:13px 14px;background:rgba(255,255,255,.04)}
+.profile-stat b{display:block;font-size:1.15rem}.profile-stat span{color:var(--muted);font-size:.8rem}
 .steps{display:grid;gap:10px;margin-top:16px}
 .step{
   display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
@@ -199,12 +213,14 @@ input[type=range]{width:100%;accent-color:var(--glow);margin:22px 0 14px}
 @media(max-width:640px){
   .wrap{width:min(94vw,1180px);padding-top:22px}
   .nav{margin-bottom:34px}
-  .result-grid,.shopping-list{grid-template-columns:1fr}
+  .result-grid,.shopping-list,.profile-grid{grid-template-columns:1fr}
   .garlic{grid-template-columns:1fr}
   .stats{grid-template-columns:1fr;position:relative;margin-top:290px}
   .grill-card{min-height:560px}
   h1{font-size:clamp(3.25rem,18vw,6rem)}
   input[type=number]{font-size:2rem}
+  .meat-row{grid-template-columns:1fr;gap:8px}
+  .amount{text-align:left}
 }
 @media print{
   body{background:#fff;color:#111}
@@ -212,7 +228,7 @@ input[type=range]{width:100%;accent-color:var(--glow);margin:22px 0 14px}
   .wrap{width:100%;padding:0}
   .hero,.calculator{display:block}
   .card{box-shadow:none;border-color:#ddd;background:#fff;color:#111;margin:12px 0}
-  .ingredient span,.garlic p,.shopping p,.step span,.shopping-list li,.lead,.note{color:#444}
+  .ingredient span,.garlic p,.shopping p,.profile p,.step span,.shopping-list li,.lead,.note{color:#444}
   .controls{position:static}
 }
 </style>
@@ -226,9 +242,9 @@ input[type=range]{width:100%;accent-color:var(--glow);margin:22px 0 14px}
 
   <section class="hero">
     <div>
-      <div class="kicker">Regular soda · 0.3%</div>
+      <div class="kicker" id="heroKicker">Regular soda · 0.3%</div>
       <h1>Ćevapi<br>calculator</h1>
-      <p class="lead">Scale the exact 6 kg batch recipe by total meat weight. Use it as a shopping list at the butcher, then follow the timeline for grind, knead, chill, second grind, rest, and hot grill.</p>
+      <p class="lead">Pick Regular Soda or Extra Soda, then scale by total meat weight or by the number of ćevapi you want to roll. The app turns it into a butcher-ready shopping list and full process guide.</p>
       <div class="hero-actions">
         <a class="button" href="#calculator">Calculate batch</a>
         <button class="secondary" id="copyTop" type="button">Copy shopping list</button>
@@ -245,34 +261,57 @@ input[type=range]{width:100%;accent-color:var(--glow);margin:22px 0 14px}
       <div class="stats">
         <div class="stat"><b id="heroKg">6.00 kg</b><span>total meat</span></div>
         <div class="stat"><b id="heroSoda">18 g</b><span>baking soda</span></div>
-        <div class="stat"><b id="heroYield">~210</b><span>30 g pieces</span></div>
+        <div class="stat"><b id="heroYield">~210</b><span>30 g ćevapi</span></div>
       </div>
     </div>
   </section>
 
   <section class="calculator" id="calculator">
     <aside class="card controls">
-      <div class="label"><span>Total meat weight</span><span id="baseHint">Base recipe: 6 kg</span></div>
+      <div class="label"><span>Recipe version</span><span id="recipeHint">0.3% soda</span></div>
+      <div class="recipe-toggle" aria-label="Recipe version selector">
+        <button class="recipe-card active" type="button" data-recipe="regular">
+          <strong>Regular Soda</strong>
+          <span>Original 6 kg batch • balanced texture • 0.3% baking soda</span>
+        </button>
+        <button class="recipe-card" type="button" data-recipe="extra">
+          <strong>Extra Soda</strong>
+          <span>Juicier, puffier, bouncier texture • 0.7% baking soda</span>
+        </button>
+      </div>
+
+      <div class="label"><span>Calculate by</span><span id="inputHint">Total meat weight</span></div>
+      <div class="mode-switch" aria-label="Calculator input mode">
+        <button type="button" class="active" data-mode="weight">Meat weight</button>
+        <button type="button" data-mode="count"># of ćevapi</button>
+      </div>
+
+      <div class="label"><span id="mainInputLabel">Total meat weight</span><span id="baseHint">Base recipe: 6 kg</span></div>
       <div class="input-row">
-        <input id="weight" type="number" min="0.5" max="50" step="0.1" value="6" inputmode="decimal" aria-label="Total meat weight">
-        <div class="segment" aria-label="Unit selector">
+        <input id="mainInput" type="number" min="0.5" max="50" step="0.1" value="6" inputmode="decimal" aria-label="Total meat weight">
+        <div class="segment" id="unitSelector" aria-label="Unit selector">
           <button type="button" class="active" data-unit="kg">kg</button>
           <button type="button" data-unit="lb">lb</button>
         </div>
       </div>
       <input id="range" type="range" min="1" max="20" step="0.1" value="6" aria-label="Meat weight slider">
-      <div class="presets">
+      <div class="presets" id="presets">
         <button type="button" data-preset="3">3 kg</button>
         <button type="button" data-preset="6">6 kg</button>
         <button type="button" data-preset="10">10 kg</button>
       </div>
-      <div class="note">
-        Formula is based on total meat weight: chuck 40%, short rib 35%, brisket/fat trim 25%, salt 1.1%, black pepper 0.1%, baking soda 0.3%, garlic water 35 ml/kg.
+      <div class="note" id="formulaNote">
+        Formula is based on total meat weight. Assumes each ćevap is about 30 g after garlic water is mixed in.
       </div>
     </aside>
 
     <main class="results">
       <div class="result-grid">
+        <div class="card ingredient">
+          <small id="totalSmall">Total meat</small>
+          <b id="totalMeat">6.00 kg</b>
+          <span id="totalMeta">Target yield: about 207 ćevapi.</span>
+        </div>
         <div class="card ingredient">
           <small>Salt · 1.1%</small>
           <b id="salt">66 g</b>
@@ -284,19 +323,24 @@ input[type=range]{width:100%;accent-color:var(--glow);margin:22px 0 14px}
           <span>Fresh ground, not overpowering.</span>
         </div>
         <div class="card ingredient">
-          <small>Baking soda · 0.3%</small>
+          <small id="sodaLabel">Baking soda · 0.3%</small>
           <b id="soda">18 g</b>
-          <span>Regular soda level from your recipe.</span>
+          <span id="sodaText">Regular soda level from your recipe.</span>
         </div>
         <div class="card ingredient">
           <small>Garlic water</small>
           <b id="garlicWater">210 ml</b>
           <span>Use strained garlic water in the meat mix.</span>
         </div>
+        <div class="card ingredient">
+          <small>Estimated yield</small>
+          <b id="yieldPieces">~207</b>
+          <span>Assuming each ćevap is about 30 g.</span>
+        </div>
       </div>
 
       <section class="card meat-split">
-        <div class="label"><span>Meat split for butcher</span><span>40 / 35 / 25</span></div>
+        <div class="label"><span>Meat split for butcher</span><span id="splitLabel">40 / 35 / 25</span></div>
         <div class="meat-row">
           <strong>Chuck</strong>
           <div class="bar"><div class="fill" id="barChuck"></div></div>
@@ -325,6 +369,16 @@ input[type=range]{width:100%;accent-color:var(--glow);margin:22px 0 14px}
         </div>
       </section>
 
+      <section class="card profile">
+        <h2 id="profileTitle">Regular Soda recipe</h2>
+        <p id="profileDescription">Balanced Sarajevski-style batch with 0.3% baking soda.</p>
+        <div class="profile-grid">
+          <div class="profile-stat"><b id="baseBatch">6.00 kg</b><span>base batch</span></div>
+          <div class="profile-stat"><b id="baseSoda">18 g</b><span>base baking soda</span></div>
+          <div class="profile-stat"><b id="baseWater">210 ml</b><span>base garlic water</span></div>
+        </div>
+      </section>
+
       <section class="card shopping">
         <h2>Store list</h2>
         <p>Copy this and take it to the butcher / grocery store.</p>
@@ -338,12 +392,12 @@ input[type=range]{width:100%;accent-color:var(--glow);margin:22px 0 14px}
       <section class="card timeline">
         <h2>Process checklist</h2>
         <div class="steps" id="steps">
-          <label class="step"><input type="checkbox"><div><strong>Large grind</strong><span>Grind all meat coarse first.</span></div><em>1</em></label>
+          <label class="step"><input type="checkbox"><div><strong>Large grind</strong><span>Grind all meat coarse first. Keep the meat very cold.</span></div><em>1</em></label>
           <label class="step"><input type="checkbox"><div><strong>Mix + knead</strong><span>Add salt, pepper, baking soda, garlic water. Knead 10–15 min until sticky.</span></div><em>2</em></label>
           <label class="step"><input type="checkbox"><div><strong>Chill</strong><span>Cover and chill around 20 hours.</span></div><em>20h</em></label>
           <label class="step"><input type="checkbox"><div><strong>Medium grind</strong><span>Run through medium plate after the first long chill.</span></div><em>3</em></label>
           <label class="step"><input type="checkbox"><div><strong>Light knead</strong><span>Knead lightly for about 5 min.</span></div><em>5m</em></label>
-          <label class="step"><input type="checkbox"><div><strong>Rest overnight</strong><span>Let the texture hydrate and tighten.</span></div><em>night</em></label>
+          <label class="step"><input type="checkbox"><div><strong>Rest overnight</strong><span>Let the texture hydrate and tighten. Extra Soda especially benefits from the cold rest.</span></div><em>night</em></label>
           <label class="step"><input type="checkbox"><div><strong>Roll + hot grill</strong><span>Roll evenly and grill hot. Don’t overwork at the end.</span></div><em>🔥</em></label>
         </div>
       </section>
@@ -353,38 +407,88 @@ input[type=range]{width:100%;accent-color:var(--glow);margin:22px 0 14px}
 <div class="toast" id="toast">Copied shopping list</div>
 
 <script>
-const ratios = {
-  chuck: .40,
-  shortRib: .35,
-  brisket: .25,
-  salt: .011,
-  pepper: .001,
-  soda: .003,
-  garlicWaterMlPerKg: 35,
-  clovesPerKg: 8 / 6,
-  simmerWaterMlPerKg: 500 / 6
+const PIECE_GRAMS = 30;
+
+const recipes = {
+  regular: {
+    name: "Regular Soda",
+    shortName: "Regular",
+    sodaLabel: "0.3%",
+    baseKg: 6,
+    chuckKg: 2.4,
+    shortRibKg: 2.1,
+    brisketKg: 1.5,
+    saltPct: .011,
+    pepperPct: .001,
+    sodaPct: .003,
+    garlicWaterMl: 210,
+    cloves: 8,
+    simmerWaterMl: 500,
+    description: "Balanced Sarajevski-style batch with 0.3% baking soda.",
+    note: "Balanced texture from the original 6 kg recipe."
+  },
+  extra: {
+    name: "Extra Soda",
+    shortName: "Extra",
+    sodaLabel: "0.7%",
+    baseKg: 4.1 + 1.67 + 3.30,
+    chuckKg: 4.1,
+    shortRibKg: 1.67,
+    brisketKg: 3.30,
+    saltPct: .011,
+    pepperPct: .001,
+    sodaPct: .007,
+    garlicWaterMl: 320,
+    cloves: 10,
+    simmerWaterMl: 400,
+    description: "Higher soda = juicier, puffier, bouncier texture. Keep the mix very cold throughout.",
+    note: "Juicier, puffier, bouncier texture from the 0.7% soda recipe."
+  }
 };
 
 let unit = "kg";
+let inputMode = "weight";
+let recipeKey = "regular";
+let lastKg = 6;
+let lastCount = 207;
+
 const els = {
-  weight: document.getElementById("weight"),
+  mainInput: document.getElementById("mainInput"),
   range: document.getElementById("range"),
+  presets: document.getElementById("presets"),
+  unitSelector: document.getElementById("unitSelector"),
   baseHint: document.getElementById("baseHint"),
+  recipeHint: document.getElementById("recipeHint"),
+  inputHint: document.getElementById("inputHint"),
+  mainInputLabel: document.getElementById("mainInputLabel"),
+  heroKicker: document.getElementById("heroKicker"),
   heroKg: document.getElementById("heroKg"),
   heroSoda: document.getElementById("heroSoda"),
   heroYield: document.getElementById("heroYield"),
+  totalMeat: document.getElementById("totalMeat"),
+  totalMeta: document.getElementById("totalMeta"),
   salt: document.getElementById("salt"),
   pepper: document.getElementById("pepper"),
   soda: document.getElementById("soda"),
+  sodaLabel: document.getElementById("sodaLabel"),
+  sodaText: document.getElementById("sodaText"),
   garlicWater: document.getElementById("garlicWater"),
+  yieldPieces: document.getElementById("yieldPieces"),
   chuck: document.getElementById("chuck"),
   shortRib: document.getElementById("shortRib"),
   brisket: document.getElementById("brisket"),
   barChuck: document.getElementById("barChuck"),
   barShort: document.getElementById("barShort"),
   barBrisket: document.getElementById("barBrisket"),
+  splitLabel: document.getElementById("splitLabel"),
   garlicPrep: document.getElementById("garlicPrep"),
   cloves: document.getElementById("cloves"),
+  profileTitle: document.getElementById("profileTitle"),
+  profileDescription: document.getElementById("profileDescription"),
+  baseBatch: document.getElementById("baseBatch"),
+  baseSoda: document.getElementById("baseSoda"),
+  baseWater: document.getElementById("baseWater"),
+  formulaNote: document.getElementById("formulaNote"),
   shoppingList: document.getElementById("shoppingList"),
   toast: document.getElementById("toast")
 };
@@ -394,23 +498,55 @@ const lbToKg = lb => lb / 2.2046226218;
 const round = (n, d = 0) => Number(n.toFixed(d));
 const grams = n => `${round(n, n < 10 ? 1 : 0)} g`;
 const ml = n => `${round(n, 0)} ml`;
+const pct = n => `${round(n * 100, 1)}%`;
 const kgText = kg => `${round(kg, 2).toFixed(2)} kg`;
 const meatText = kg => unit === "kg" ? kgText(kg) : `${round(kgToLb(kg), 2).toFixed(2)} lb`;
 const exactMeatText = kg => `${kgText(kg)} / ${round(kgToLb(kg), 2).toFixed(2)} lb`;
+const recipe = () => recipes[recipeKey];
+const ratios = r => ({
+  chuck: r.chuckKg / r.baseKg,
+  shortRib: r.shortRibKg / r.baseKg,
+  brisket: r.brisketKg / r.baseKg,
+  garlicWaterMlPerKg: r.garlicWaterMl / r.baseKg,
+  clovesPerKg: r.cloves / r.baseKg,
+  simmerWaterMlPerKg: r.simmerWaterMl / r.baseKg
+});
+
+function getInputNumber(){
+  return Math.max(parseFloat(els.mainInput.value || "0") || 0, .1);
+}
+
+function kgFromCount(count, r){
+  const garlicWaterMlPerKg = ratios(r).garlicWaterMlPerKg;
+  return (count * PIECE_GRAMS) / (1000 + garlicWaterMlPerKg);
+}
+
+function countFromKg(kg, r){
+  return Math.round((kg * 1000 + kg * ratios(r).garlicWaterMlPerKg) / PIECE_GRAMS);
+}
 
 function getKg(){
-  const raw = Math.max(parseFloat(els.weight.value || "0") || 0, .1);
+  const raw = getInputNumber();
+  if(inputMode === "count") return kgFromCount(raw, recipe());
   return unit === "kg" ? raw : lbToKg(raw);
 }
 
-function setWeightFromKg(kg){
-  els.weight.value = unit === "kg" ? round(kg, 2) : round(kgToLb(kg), 2);
+function setInputFromKg(kg){
+  lastKg = kg;
+  lastCount = countFromKg(kg, recipe());
+  if(inputMode === "count"){
+    els.mainInput.value = lastCount;
+  }else{
+    els.mainInput.value = unit === "kg" ? round(kg, 2) : round(kgToLb(kg), 2);
+  }
   els.range.value = Math.min(Math.max(kg, Number(els.range.min)), Number(els.range.max));
   update();
 }
 
 function buildShopping(data){
   return [
+    ["Recipe", `${data.recipe.name} (${data.recipe.sodaLabel} baking soda)`],
+    ["Target yield", `about ${data.yieldPieces} ćevapi at ${PIECE_GRAMS} g each`],
     ["Beef chuck", exactMeatText(data.chuck)],
     ["Beef short rib", exactMeatText(data.shortRib)],
     ["Brisket/fat trim", exactMeatText(data.brisket)],
@@ -424,7 +560,8 @@ function buildShopping(data){
 }
 
 function shoppingText(data){
-  return `Sarajevski Ćevapi shopping list (${kgText(data.totalKg)} total meat)
+  return `Sarajevski Ćevapi shopping list — ${data.recipe.name} (${data.recipe.sodaLabel} baking soda)
+${kgText(data.totalKg)} total meat / about ${data.yieldPieces} ćevapi at ${PIECE_GRAMS} g each
 
 - Beef chuck: ${exactMeatText(data.chuck)}
 - Beef short rib: ${exactMeatText(data.shortRib)}
@@ -436,8 +573,11 @@ function shoppingText(data){
 - Water for garlic infusion: ${ml(data.simmerWater)}
 - Use strained garlic water: ${ml(data.garlicWater)}
 
+Recipe note:
+${data.recipe.note}
+
 Process:
-Large grind → knead 10–15 min → chill 20h → medium grind → light knead 5 min → rest overnight → roll & grill hot.`;
+Large grind → mix and knead 10–15 min → chill 20h → medium grind → light knead 5 min → rest overnight → roll and grill hot.`;
 }
 
 async function copyShopping(){
@@ -457,62 +597,149 @@ function showToast(message){
 }
 
 function calculate(){
+  const r = recipe();
+  const split = ratios(r);
   const totalKg = getKg();
   return {
+    recipe: r,
+    split,
     totalKg,
-    chuck: totalKg * ratios.chuck,
-    shortRib: totalKg * ratios.shortRib,
-    brisket: totalKg * ratios.brisket,
-    salt: totalKg * 1000 * ratios.salt,
-    pepper: totalKg * 1000 * ratios.pepper,
-    soda: totalKg * 1000 * ratios.soda,
-    garlicWater: totalKg * ratios.garlicWaterMlPerKg,
-    cloves: Math.max(1, Math.round(totalKg * ratios.clovesPerKg)),
-    simmerWater: totalKg * ratios.simmerWaterMlPerKg,
-    yieldPieces: Math.round((totalKg * 1000 + totalKg * ratios.garlicWaterMlPerKg) / 30)
+    chuck: totalKg * split.chuck,
+    shortRib: totalKg * split.shortRib,
+    brisket: totalKg * split.brisket,
+    salt: totalKg * 1000 * r.saltPct,
+    pepper: totalKg * 1000 * r.pepperPct,
+    soda: totalKg * 1000 * r.sodaPct,
+    garlicWater: totalKg * split.garlicWaterMlPerKg,
+    cloves: Math.max(1, Math.round(totalKg * split.clovesPerKg)),
+    simmerWater: totalKg * split.simmerWaterMlPerKg,
+    yieldPieces: countFromKg(totalKg, r)
   };
+}
+
+function updateInputChrome(data){
+  const r = data.recipe;
+  if(inputMode === "count"){
+    els.mainInputLabel.textContent = "Number of ćevapi";
+    els.inputHint.textContent = "Target count";
+    els.mainInput.setAttribute("aria-label", "Number of ćevapi");
+    els.mainInput.min = "10";
+    els.mainInput.max = "2000";
+    els.mainInput.step = "1";
+    els.unitSelector.style.display = "none";
+    els.presets.innerHTML = `
+      <button type="button" data-count-preset="100">100 pcs</button>
+      <button type="button" data-count-preset="200">200 pcs</button>
+      <button type="button" data-count-preset="300">300 pcs</button>
+    `;
+    els.baseHint.textContent = `Assumes ${PIECE_GRAMS} g each`;
+  }else{
+    els.mainInputLabel.textContent = "Total meat weight";
+    els.inputHint.textContent = "Total meat weight";
+    els.mainInput.setAttribute("aria-label", "Total meat weight");
+    els.mainInput.min = unit === "kg" ? "0.5" : "1";
+    els.mainInput.max = unit === "kg" ? "50" : "110";
+    els.mainInput.step = unit === "kg" ? "0.1" : "0.25";
+    els.unitSelector.style.display = "flex";
+    els.presets.innerHTML = `
+      <button type="button" data-preset="3">3 kg</button>
+      <button type="button" data-preset="6">6 kg</button>
+      <button type="button" data-preset="10">10 kg</button>
+    `;
+    els.baseHint.textContent = unit === "kg" ? `Base recipe: ${kgText(r.baseKg)}` : `Base recipe: ${round(kgToLb(r.baseKg), 2).toFixed(2)} lb`;
+  }
 }
 
 function update(){
   const data = calculate();
+  const r = data.recipe;
+  const splitLabel = `${round(data.split.chuck * 100, 1)} / ${round(data.split.shortRib * 100, 1)} / ${round(data.split.brisket * 100, 1)}`;
+
+  lastKg = data.totalKg;
+  lastCount = data.yieldPieces;
+  updateInputChrome(data);
+
   els.range.value = Math.min(Math.max(data.totalKg, Number(els.range.min)), Number(els.range.max));
-  els.baseHint.textContent = unit === "kg" ? "Base recipe: 6 kg" : "Base recipe: 13.23 lb";
+  els.recipeHint.textContent = `${r.sodaLabel} soda`;
+  els.heroKicker.textContent = `${r.name} · ${r.sodaLabel}`;
   els.heroKg.textContent = kgText(data.totalKg);
   els.heroSoda.textContent = grams(data.soda);
   els.heroYield.textContent = `~${data.yieldPieces}`;
+  els.totalMeat.textContent = kgText(data.totalKg);
+  els.totalMeta.textContent = `Target yield: about ${data.yieldPieces} ćevapi at ${PIECE_GRAMS} g each.`;
   els.salt.textContent = grams(data.salt);
   els.pepper.textContent = grams(data.pepper);
+  els.sodaLabel.textContent = `Baking soda · ${r.sodaLabel}`;
   els.soda.textContent = grams(data.soda);
+  els.sodaText.textContent = r.name === "Extra Soda" ? "Extra soda level for juicier, puffier, bouncier texture." : "Regular soda level from your recipe.";
   els.garlicWater.textContent = ml(data.garlicWater);
+  els.yieldPieces.textContent = `~${data.yieldPieces}`;
   els.chuck.textContent = meatText(data.chuck);
   els.shortRib.textContent = meatText(data.shortRib);
   els.brisket.textContent = meatText(data.brisket);
-  els.barChuck.style.width = "40%";
-  els.barShort.style.width = "35%";
-  els.barBrisket.style.width = "25%";
+  els.barChuck.style.width = `${data.split.chuck * 100}%`;
+  els.barShort.style.width = `${data.split.shortRib * 100}%`;
+  els.barBrisket.style.width = `${data.split.brisket * 100}%`;
+  els.splitLabel.textContent = splitLabel;
   els.cloves.textContent = data.cloves;
   els.garlicPrep.textContent = `Boil about ${data.cloves} cloves in ${ml(data.simmerWater)} water → simmer 5 min → cool → strain → use ${ml(data.garlicWater)}.`;
+  els.profileTitle.textContent = `${r.name} recipe`;
+  els.profileDescription.textContent = r.description;
+  els.baseBatch.textContent = kgText(r.baseKg);
+  els.baseSoda.textContent = grams(r.baseKg * 1000 * r.sodaPct);
+  els.baseWater.textContent = ml(r.garlicWaterMl);
+  els.formulaNote.textContent = `${r.name}: chuck ${pct(data.split.chuck)}, short rib ${pct(data.split.shortRib)}, brisket/fat trim ${pct(data.split.brisket)}, salt ${pct(r.saltPct)}, pepper ${pct(r.pepperPct)}, baking soda ${r.sodaLabel}, garlic water ${round(data.split.garlicWaterMlPerKg, 1)} ml/kg. Count mode assumes ${PIECE_GRAMS} g per ćevap after garlic water.`;
 
   els.shoppingList.innerHTML = buildShopping(data)
     .map(([name, value]) => `<li><b>${name}:</b> ${value}</li>`)
     .join("");
+
+  bindDynamicPresetButtons();
 }
+
+function bindDynamicPresetButtons(){
+  document.querySelectorAll("[data-preset]").forEach(btn => {
+    btn.onclick = () => setInputFromKg(Number(btn.dataset.preset));
+  });
+  document.querySelectorAll("[data-count-preset]").forEach(btn => {
+    btn.onclick = () => {
+      inputMode = "count";
+      document.querySelectorAll(".mode-switch button").forEach(b => b.classList.toggle("active", b.dataset.mode === "count"));
+      els.mainInput.value = Number(btn.dataset.countPreset);
+      update();
+    };
+  });
+}
+
+document.querySelectorAll(".recipe-card").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const currentKg = getKg();
+    recipeKey = btn.dataset.recipe;
+    document.querySelectorAll(".recipe-card").forEach(b => b.classList.toggle("active", b === btn));
+    setInputFromKg(currentKg);
+  });
+});
+
+document.querySelectorAll(".mode-switch button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const currentKg = getKg();
+    inputMode = btn.dataset.mode;
+    document.querySelectorAll(".mode-switch button").forEach(b => b.classList.toggle("active", b === btn));
+    setInputFromKg(currentKg);
+  });
+});
 
 document.querySelectorAll(".segment button").forEach(btn => {
   btn.addEventListener("click", () => {
     const oldKg = getKg();
     unit = btn.dataset.unit;
     document.querySelectorAll(".segment button").forEach(b => b.classList.toggle("active", b === btn));
-    els.weight.step = unit === "kg" ? "0.1" : "0.25";
-    els.weight.min = unit === "kg" ? "0.5" : "1";
-    els.weight.max = unit === "kg" ? "50" : "110";
-    setWeightFromKg(oldKg);
+    setInputFromKg(oldKg);
   });
 });
 
-els.weight.addEventListener("input", update);
-els.range.addEventListener("input", () => setWeightFromKg(parseFloat(els.range.value)));
-document.querySelectorAll("[data-preset]").forEach(btn => btn.addEventListener("click", () => setWeightFromKg(Number(btn.dataset.preset))));
+els.mainInput.addEventListener("input", update);
+els.range.addEventListener("input", () => setInputFromKg(parseFloat(els.range.value)));
 document.getElementById("copyList").addEventListener("click", copyShopping);
 document.getElementById("copyTop").addEventListener("click", copyShopping);
 document.getElementById("printList").addEventListener("click", () => window.print());

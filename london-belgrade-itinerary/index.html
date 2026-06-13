@@ -3,246 +3,341 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SFO → London → Belgrade · Confirmed Itinerary</title>
-  <meta name="description" content="Simple premium itinerary page for SFO to London Heathrow, overnight at Heathrow Terminal 4, then Air Serbia to Belgrade." />
+  <title>SFO → London → Belgrade · Interactive Travel Timeline</title>
+  <meta name="description" content="Interactive travel timeline for SFO to London Heathrow, Heathrow overnight, then Air Serbia to Belgrade." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root{
-      --bg:#060713;
-      --ink:#fff8eb;
-      --muted:#aeb7c8;
-      --soft:#d8dfed;
-      --gold:#f2c772;
-      --cyan:#75e5ff;
-      --violet:#9b8cff;
-      --green:#9bf5c0;
-      --rose:#ff8da1;
-      --glass:rgba(255,255,255,.075);
-      --glass-strong:rgba(255,255,255,.13);
+      --bg:#050711;
+      --ink:#fff8ec;
+      --muted:#aeb8c9;
+      --dim:#6f7a91;
+      --gold:#f3c86a;
+      --cyan:#76e8ff;
+      --blue:#7d98ff;
+      --green:#9af3bd;
+      --pink:#ff8fae;
+      --panel:rgba(255,255,255,.072);
+      --panel2:rgba(255,255,255,.13);
       --line:rgba(255,255,255,.15);
-      --shadow:0 28px 90px rgba(0,0,0,.48);
+      --shadow:0 30px 110px rgba(0,0,0,.52);
       --radius:30px;
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
-      margin:0;
-      min-height:100vh;
-      color:var(--ink);
+      margin:0; min-height:100vh; color:var(--ink);
       font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background:
-        radial-gradient(circle at 16% 12%,rgba(117,229,255,.26),transparent 27rem),
-        radial-gradient(circle at 84% 4%,rgba(242,199,114,.23),transparent 31rem),
-        radial-gradient(circle at 75% 82%,rgba(155,140,255,.20),transparent 34rem),
-        linear-gradient(140deg,#050612 0%,#0b1124 54%,#050612 100%);
+        radial-gradient(circle at 12% 10%, rgba(118,232,255,.25), transparent 28rem),
+        radial-gradient(circle at 88% 0%, rgba(243,200,106,.23), transparent 32rem),
+        radial-gradient(circle at 80% 85%, rgba(125,152,255,.17), transparent 34rem),
+        linear-gradient(135deg,#050711 0%,#0a1024 52%,#050711 100%);
       overflow-x:hidden;
     }
     body:before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      opacity:.13;
+      content:""; position:fixed; inset:0; pointer-events:none; opacity:.13; z-index:0;
       background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
     }
-    a{color:inherit}
-    .wrap{width:min(1120px,92vw);margin:0 auto;padding:34px 0 72px;position:relative}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:34px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.03em}
-    .orb{width:14px;height:14px;border-radius:99px;background:var(--green);box-shadow:0 0 24px var(--green)}
-    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(255,255,255,.075);border-radius:999px;padding:9px 12px;color:var(--soft);font-size:.82rem;font-weight:800;backdrop-filter:blur(16px)}
-    .hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:24px;align-items:stretch;margin-bottom:24px}
-    @media(max-width:900px){.hero{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}}
-    .hero-copy,.ticket,.panel,.mini-card,.details-panel{
-      border:1px solid var(--line);
-      background:linear-gradient(180deg,var(--glass-strong),rgba(255,255,255,.055));
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(22px);
-      border-radius:var(--radius);
+    body:after{
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+      background:linear-gradient(180deg,transparent 0%,rgba(5,7,17,.28) 52%,rgba(5,7,17,.9) 100%);
     }
-    .hero-copy{padding:36px;position:relative;overflow:hidden}
-    .hero-copy:after{content:"";position:absolute;right:-80px;top:-90px;width:260px;height:260px;border-radius:999px;background:radial-gradient(circle,rgba(242,199,114,.32),transparent 65%)}
-    .kicker{color:var(--gold);text-transform:uppercase;letter-spacing:.18em;font-size:.76rem;font-weight:900;margin-bottom:14px}
-    h1{font-family:"Playfair Display",Georgia,serif;font-size:clamp(3.6rem,9vw,7.8rem);line-height:.84;margin:0 0 18px;letter-spacing:-.07em}
-    .lede{color:var(--soft);font-size:clamp(1.06rem,2vw,1.32rem);line-height:1.58;max-width:660px;margin:0}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
-    button,.button{border:0;border-radius:999px;padding:13px 17px;font-weight:900;cursor:pointer;text-decoration:none;background:linear-gradient(135deg,var(--gold),#fff0bd);color:#09101c;box-shadow:0 18px 40px rgba(242,199,114,.2)}
-    button.secondary,.button.secondary{background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--ink);box-shadow:none}
-    .ticket{padding:0;overflow:hidden;position:relative}
-    .ticket-head{padding:26px 26px 18px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;background:linear-gradient(135deg,rgba(117,229,255,.16),rgba(242,199,114,.12))}
-    .ticket-title{font-size:1.12rem;font-weight:900}.ticket-sub{color:var(--muted);font-size:.92rem;margin-top:4px}
-    .route-big{padding:24px 26px;display:flex;align-items:center;justify-content:space-between;gap:14px}
-    .airport{text-align:center}.code{font-size:clamp(2.2rem,6vw,4.4rem);font-weight:950;letter-spacing:-.07em}.city{color:var(--muted);font-size:.9rem;font-weight:700}
-    .flight-line{flex:1;min-width:80px;height:2px;background:linear-gradient(90deg,var(--cyan),var(--gold));position:relative;box-shadow:0 0 22px rgba(117,229,255,.55)}
-    .flight-line:before{content:"✈";position:absolute;left:50%;top:50%;transform:translate(-50%,-55%);font-size:1.4rem;color:#fff;text-shadow:0 0 18px var(--cyan);animation:float 3.8s ease-in-out infinite}
-    @keyframes float{0%,100%{transform:translate(-50%,-55%)}50%{transform:translate(-42%,-70%)}}
-    .ticket-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-top:1px dashed rgba(255,255,255,.28)}
-    .ticket-cell{background:rgba(6,7,19,.68);padding:17px 20px}.label{text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-size:.66rem;font-weight:900}.value{font-weight:900;margin-top:5px}
-    .now-card{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
-    @media(max-width:720px){.now-card{grid-template-columns:1fr}.ticket-grid{grid-template-columns:1fr}}
-    .mini-card{padding:18px}.mini-card b{display:block;font-size:1.28rem;margin-bottom:5px}.mini-card span{color:var(--muted);font-size:.92rem;line-height:1.4}
-    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:30px 0 16px}.tab{background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--soft);box-shadow:none}.tab.active{background:linear-gradient(135deg,var(--cyan),#dff9ff);color:#07101a}
-    .panel{padding:28px;display:none;animation:fade .22s ease-out}.panel.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-    .panel-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:22px}.panel h2{font-size:clamp(2rem,5vw,4rem);letter-spacing:-.07em;margin:0}.panel p{color:var(--muted);line-height:1.55;margin:.4rem 0 0;max-width:620px}
-    @media(max-width:680px){.panel-top{flex-direction:column}}
-    .info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}@media(max-width:900px){.info-grid{grid-template-columns:1fr 1fr}}@media(max-width:540px){.info-grid{grid-template-columns:1fr}}
-    .info{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.055);padding:16px}.info .value{font-size:1rem}
-    .simple-flow{margin-top:16px;display:grid;gap:10px}.flow-step{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:start;border:1px solid var(--line);background:rgba(255,255,255,.055);border-radius:20px;padding:14px}.flow-time{font-weight:950;color:var(--gold)}
-    @media(max-width:560px){.flow-step{grid-template-columns:1fr}}
-    details{border:1px solid var(--line);background:rgba(255,255,255,.055);border-radius:22px;margin-top:16px;overflow:hidden}summary{cursor:pointer;padding:16px 18px;font-weight:900;color:var(--ink)}details div{padding:0 18px 18px;color:var(--muted);line-height:1.6}
-    .checklist{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}@media(max-width:1000px){.checklist{grid-template-columns:1fr 1fr}}@media(max-width:620px){.checklist{grid-template-columns:1fr}}
-    .check{border:1px solid var(--line);background:rgba(255,255,255,.055);border-radius:20px;padding:15px;color:var(--soft);font-size:.92rem;line-height:1.45}.check:before{content:"✓";display:inline-grid;place-items:center;width:21px;height:21px;border-radius:50%;margin-right:8px;background:rgba(155,245,192,.16);color:var(--green);font-weight:950}
-    .privacy{margin-top:18px;color:var(--muted);font-size:.9rem;text-align:center}.footer{color:var(--muted);text-align:center;margin-top:36px;font-size:.9rem}
-    .glow{position:absolute;inset:auto 0 -220px 0;margin:auto;width:70%;height:260px;background:radial-gradient(ellipse,rgba(117,229,255,.18),transparent 68%);filter:blur(6px);pointer-events:none}
-    @media print{body{background:#fff;color:#111}body:before,.actions,.tabs,.glow{display:none}.hero-copy,.ticket,.panel,.mini-card{box-shadow:none;background:#fff;border:1px solid #ddd;color:#111}.panel{display:block;margin-top:20px}.panel:not(.active){display:block}.muted,.city,.label,.ticket-sub,.privacy,.footer{color:#555}}
+    a{color:inherit}
+    .wrap{position:relative; z-index:1; width:min(1180px,92vw); margin:0 auto; padding:28px 0 78px}
+    .topbar{display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:36px}
+    @media(max-width:740px){.topbar{flex-direction:column; align-items:flex-start}}
+    .brand{display:flex; align-items:center; gap:12px; font-weight:900; letter-spacing:-.03em}
+    .orb{width:13px; height:13px; border-radius:999px; background:var(--green); box-shadow:0 0 26px var(--green)}
+    .chip{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); background:rgba(255,255,255,.075); border-radius:999px; padding:9px 12px; color:#e9edf7; font-size:.82rem; font-weight:800; backdrop-filter:blur(18px)}
+    .hero{display:grid; grid-template-columns:minmax(0,1fr) 350px; gap:22px; align-items:stretch; margin-bottom:24px}
+    @media(max-width:920px){.hero{grid-template-columns:1fr}}
+    .panel,.hero-card,.control-card,.timeline-shell,.side-card{
+      border:1px solid var(--line); background:linear-gradient(180deg,var(--panel2),rgba(255,255,255,.055));
+      box-shadow:var(--shadow); backdrop-filter:blur(22px); border-radius:var(--radius);
+    }
+    .hero-card{padding:38px; overflow:hidden; position:relative; min-height:430px; display:flex; flex-direction:column; justify-content:space-between}
+    .hero-card:before{content:""; position:absolute; width:420px; height:420px; right:-170px; top:-160px; border-radius:50%; background:radial-gradient(circle,rgba(243,200,106,.26),transparent 64%)}
+    .kicker{color:var(--gold); text-transform:uppercase; letter-spacing:.18em; font-size:.78rem; font-weight:950; margin-bottom:12px}
+    h1{font-family:"Instrument Serif",Georgia,serif; font-size:clamp(4rem,10vw,8.8rem); font-weight:400; line-height:.78; letter-spacing:-.06em; margin:0 0 18px}
+    .lede{color:#dce4f3; font-size:clamp(1.05rem,1.9vw,1.3rem); line-height:1.58; max-width:720px; margin:0}
+    .hero-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:26px}
+    @media(max-width:640px){.hero-stats{grid-template-columns:1fr}}
+    .mini{border:1px solid var(--line); background:rgba(255,255,255,.065); border-radius:22px; padding:16px}
+    .mini b{display:block; font-size:1.35rem; letter-spacing:-.04em}.mini span{color:var(--muted); font-size:.88rem}
+    .side-card{padding:24px; display:flex; flex-direction:column; justify-content:space-between; gap:18px}
+    .boarding{border-radius:26px; overflow:hidden; background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.06)); border:1px solid var(--line)}
+    .boarding-top{padding:18px 18px 14px; display:flex; justify-content:space-between; gap:12px; background:linear-gradient(135deg,rgba(118,232,255,.16),rgba(243,200,106,.13))}
+    .boarding-route{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:20px 18px}
+    .code{font-size:2.65rem; font-weight:950; letter-spacing:-.08em}.city{color:var(--muted); font-size:.82rem; font-weight:700}.line{height:2px; flex:1; background:linear-gradient(90deg,var(--cyan),var(--gold)); box-shadow:0 0 22px rgba(118,232,255,.55); position:relative}.line:after{content:"✈"; position:absolute; left:52%; top:50%; transform:translate(-50%,-58%); text-shadow:0 0 16px var(--cyan)}
+    .boarding-grid{display:grid; grid-template-columns:1fr 1fr; border-top:1px dashed rgba(255,255,255,.28)}
+    .cell{padding:14px 16px; border-right:1px solid var(--line); border-bottom:1px solid var(--line)}.cell:nth-child(2n){border-right:0}.label{color:var(--dim); text-transform:uppercase; letter-spacing:.13em; font-size:.64rem; font-weight:950}.value{font-weight:900; margin-top:4px}
+    .actions{display:flex; gap:10px; flex-wrap:wrap}
+    button,.btn{border:0; border-radius:999px; padding:12px 15px; font-weight:950; cursor:pointer; background:linear-gradient(135deg,var(--gold),#fff0bd); color:#08101d; text-decoration:none; box-shadow:0 18px 42px rgba(243,200,106,.2)}
+    button.secondary,.btn.secondary{background:rgba(255,255,255,.08); border:1px solid var(--line); color:#fff; box-shadow:none}
+    .section-head{display:flex; justify-content:space-between; align-items:end; gap:18px; margin:40px 0 16px}
+    @media(max-width:760px){.section-head{flex-direction:column; align-items:flex-start}}
+    h2{font-size:clamp(2.1rem,5vw,4.1rem); margin:0; line-height:.95; letter-spacing:-.07em}.section-head p{margin:8px 0 0; color:var(--muted); line-height:1.5; max-width:620px}
+    .timeline-shell{padding:28px; position:relative; overflow:hidden}
+    .timeline-shell:before{content:""; position:absolute; inset:0; background:radial-gradient(circle at 50% 20%,rgba(118,232,255,.1),transparent 36rem); pointer-events:none}
+    .travel-line{position:relative; display:grid; grid-template-columns:repeat(5,1fr); gap:14px; align-items:stretch; z-index:1}
+    @media(max-width:950px){.travel-line{grid-template-columns:1fr}.connector{display:none}}
+    .node{min-height:210px; padding:18px; border-radius:26px; border:1px solid var(--line); background:rgba(255,255,255,.062); cursor:pointer; position:relative; transition:transform .25s ease, background .25s ease, border-color .25s ease; outline:none}
+    .node:hover,.node:focus-visible,.node.active{transform:translateY(-6px); background:rgba(255,255,255,.105); border-color:rgba(243,200,106,.45)}
+    .node .icon{width:42px; height:42px; display:grid; place-items:center; border-radius:16px; background:rgba(118,232,255,.12); color:var(--cyan); margin-bottom:14px}.node.hotel .icon{background:rgba(243,200,106,.13); color:var(--gold)}.node.serbia .icon{background:rgba(154,243,189,.13); color:var(--green)}
+    .node time{display:block; color:var(--gold); font-size:.74rem; text-transform:uppercase; letter-spacing:.12em; font-weight:950; margin-bottom:7px}.node h3{font-size:1.16rem; margin:0 0 8px; letter-spacing:-.04em}.node p{color:var(--muted); margin:0; font-size:.9rem; line-height:1.42}
+    .connector{height:2px; align-self:center; background:linear-gradient(90deg,var(--cyan),var(--gold)); opacity:.65; box-shadow:0 0 20px rgba(118,232,255,.45)}
+    .detail-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:18px; margin-top:18px}
+    @media(max-width:860px){.detail-grid{grid-template-columns:1fr}}
+    .detail-card{border:1px solid var(--line); border-radius:26px; padding:24px; background:rgba(255,255,255,.06)}
+    .detail-title{display:flex; align-items:center; gap:12px; margin-bottom:18px}.detail-title i{color:var(--cyan)}.detail-title h3{margin:0; font-size:1.45rem; letter-spacing:-.04em}
+    .facts{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}@media(max-width:560px){.facts{grid-template-columns:1fr}}
+    .fact{border:1px solid var(--line); border-radius:18px; padding:13px; background:rgba(255,255,255,.052)}.fact b{display:block; margin-top:4px; font-size:.98rem}
+    .tips{display:grid; gap:10px}.tip{display:flex; gap:10px; align-items:flex-start; border:1px solid var(--line); background:rgba(255,255,255,.052); border-radius:18px; padding:13px; color:#e9edf7; line-height:1.42}.tip i{color:var(--green); flex:0 0 auto; margin-top:1px}
+    .drawer{margin-top:18px; border:1px solid rgba(243,200,106,.28); background:linear-gradient(135deg,rgba(243,200,106,.11),rgba(118,232,255,.07)); border-radius:28px; padding:22px; display:grid; grid-template-columns:1fr auto; gap:16px; align-items:center}
+    @media(max-width:700px){.drawer{grid-template-columns:1fr}}
+    .drawer h3{margin:0 0 6px; font-size:1.75rem; letter-spacing:-.05em}.drawer p{margin:0; color:#dce4f3; line-height:1.52}.drawer .tag{justify-self:end}@media(max-width:700px){.drawer .tag{justify-self:start}}
+    .checklist{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:16px}@media(max-width:920px){.checklist{grid-template-columns:1fr 1fr}}@media(max-width:600px){.checklist{grid-template-columns:1fr}}
+    .check{border:1px solid var(--line); background:rgba(255,255,255,.06); border-radius:22px; padding:16px; color:#dce4f3; line-height:1.45; cursor:pointer}.check.done{background:rgba(154,243,189,.11); border-color:rgba(154,243,189,.35)}.check:before{content:"○"; color:var(--muted); margin-right:8px; font-weight:950}.check.done:before{content:"✓"; color:var(--green)}
+    .tippy-box{background:#0b1024;color:#fff;border:1px solid rgba(255,255,255,.16);box-shadow:0 24px 70px rgba(0,0,0,.45);border-radius:18px;font-family:Inter,system-ui,sans-serif}.tippy-content{padding:14px}.tooltip-title{font-weight:950;color:#fff;margin-bottom:8px}.tooltip-list{margin:0;padding:0;list-style:none;display:grid;gap:6px;color:#dce4f3}.tooltip-list b{color:var(--gold)}
+    .privacy{margin-top:18px; color:var(--muted); text-align:center; font-size:.9rem}.footer{color:var(--muted); text-align:center; margin-top:34px; font-size:.9rem}
+    @media print{body{background:#fff;color:#111}body:before,body:after,.actions,.privacy{display:none}.hero-card,.side-card,.timeline-shell,.detail-card,.drawer,.check{background:#fff!important;color:#111!important;border:1px solid #ddd;box-shadow:none}.muted,.city,.label,.node p,.section-head p,.footer{color:#555}.node{break-inside:avoid}.wrap{padding:20px 0}}
   </style>
 </head>
 <body>
   <main class="wrap">
     <div class="topbar">
-      <div class="brand"><span class="orb"></span>Confirmed travel plan</div>
-      <div class="pill">Public-safe page · no PNRs or ticket numbers</div>
+      <div class="brand"><span class="orb"></span> Luka’s confirmed travel timeline</div>
+      <div class="chip"><i data-lucide="shield-check" size="16"></i> Public-safe: no PNRs, ticket numbers, or payment info</div>
     </div>
 
     <section class="hero">
-      <div class="hero-copy">
-        <div class="kicker">June 15–17, 2026</div>
-        <h1>SFO → London → Belgrade</h1>
-        <p class="lede">A simple, comfort-first itinerary: Virgin Atlantic Upper Class to Heathrow, one night at Terminal 4, then Air Serbia to Belgrade with a safe overnight buffer.</p>
-        <div class="actions">
-          <button onclick="window.print()">Print / Save PDF</button>
-          <button class="secondary" onclick="copySummary()">Copy summary</button>
-          <a class="button secondary" href="../">Back to docs</a>
+      <div class="hero-card">
+        <div>
+          <div class="kicker">June 15–17, 2026 · Comfort-first route</div>
+          <h1>SFO → London → Belgrade</h1>
+          <p class="lede">A clean, premium-feeling itinerary: Virgin Atlantic Upper Class to Heathrow, a protected overnight at Terminal 4, then Air Serbia to Belgrade the next day.</p>
+          <div class="hero-stats">
+            <div class="mini"><b>VS20</b><span>A350-1000 Upper Class</span></div>
+            <div class="mini"><b>25h+</b><span>Safe overnight LHR buffer</span></div>
+            <div class="mini"><b>T4</b><span>Hotel + Air Serbia terminal</span></div>
+          </div>
         </div>
-        <div class="glow"></div>
+        <div class="actions">
+          <button onclick="window.print()"><i data-lucide="printer" size="16"></i> Print / PDF</button>
+          <button class="secondary" onclick="copySummary()"><i data-lucide="copy" size="16"></i> Copy summary</button>
+          <a class="btn secondary" href="../"><i data-lucide="arrow-left" size="16"></i> Back to docs</a>
+        </div>
       </div>
 
-      <aside class="ticket" aria-label="Itinerary summary ticket">
-        <div class="ticket-head">
-          <div><div class="ticket-title">Main routing</div><div class="ticket-sub">Upper Class + Heathrow overnight + Air Serbia</div></div>
-          <span class="pill">25h+ LHR buffer</span>
+      <aside class="side-card">
+        <div class="boarding">
+          <div class="boarding-top">
+            <div><div class="label">Main route</div><div class="value">Upper Class + overnight + Air Serbia</div></div>
+            <span class="chip">Confirmed</span>
+          </div>
+          <div class="boarding-route">
+            <div><div class="code">SFO</div><div class="city">San Francisco</div></div>
+            <div class="line"></div>
+            <div><div class="code">LHR</div><div class="city">Heathrow</div></div>
+            <div class="line"></div>
+            <div><div class="code">BEG</div><div class="city">Belgrade</div></div>
+          </div>
+          <div class="boarding-grid">
+            <div class="cell"><div class="label">Best seat</div><div class="value">1D</div></div>
+            <div class="cell"><div class="label">Hotel</div><div class="value">Premier Inn T4</div></div>
+            <div class="cell"><div class="label">Depart</div><div class="value">Mon 5:45 PM</div></div>
+            <div class="cell"><div class="label">Arrive BEG</div><div class="value">Wed 5:15 PM</div></div>
+          </div>
         </div>
-        <div class="route-big">
-          <div class="airport"><div class="code">SFO</div><div class="city">San Francisco</div></div>
-          <div class="flight-line"></div>
-          <div class="airport"><div class="code">LHR</div><div class="city">Heathrow</div></div>
-          <div class="flight-line"></div>
-          <div class="airport"><div class="code">BEG</div><div class="city">Belgrade</div></div>
-        </div>
-        <div class="ticket-grid">
-          <div class="ticket-cell"><div class="label">Seat</div><div class="value">1D · Upper Class</div></div>
-          <div class="ticket-cell"><div class="label">Hotel</div><div class="value">Premier Inn T4</div></div>
-          <div class="ticket-cell"><div class="label">Depart SFO</div><div class="value">Mon 5:45 PM</div></div>
-          <div class="ticket-cell"><div class="label">Depart LHR</div><div class="value">Wed 1:30 PM</div></div>
-        </div>
+        <p class="muted" style="line-height:1.55;margin:0">Hover or tap any timeline card below to reveal details without turning the page into a wall of text.</p>
       </aside>
     </section>
 
-    <section class="now-card" aria-label="Key itinerary highlights">
-      <div class="mini-card"><b>VS20 · A350-1000</b><span>Virgin Atlantic Upper Class from SFO to London Heathrow Terminal 3.</span></div>
-      <div class="mini-card"><b>Sleep at T4</b><span>Premier Inn Heathrow Terminal 4 keeps the next morning simple.</span></div>
-      <div class="mini-card"><b>JU211 · Air Serbia</b><span>LHR Terminal 4 to Belgrade Terminal 2, Economy Standard, seat 11D.</span></div>
+    <section>
+      <div class="section-head">
+        <div><h2>Whole-trip timeline</h2><p>One simple travel story from SFO check-in to Belgrade arrival. Hover each card for full details; click/tap to pin it in the detail panel.</p></div>
+        <span class="chip"><i data-lucide="mouse-pointer-click" size="16"></i> Hover / tap interactive cards</span>
+      </div>
+      <div class="timeline-shell">
+        <div class="travel-line" id="timeline">
+          <article class="node active" tabindex="0" data-step="0" data-tippy-content="">
+            <div class="icon"><i data-lucide="badge-check" size="22"></i></div>
+            <time>Mon Jun 15 · afternoon</time>
+            <h3>SFO airport arrival</h3>
+            <p>Use Virgin Upper Class check-in, TSA PreCheck if it prints, then head to the Clubhouse.</p>
+          </article>
+          <div class="connector"></div>
+          <article class="node" tabindex="0" data-step="1" data-tippy-content="">
+            <div class="icon"><i data-lucide="plane" size="22"></i></div>
+            <time>Mon 5:45 PM → Tue 12:05 PM</time>
+            <h3>Virgin VS20 · SFO → LHR</h3>
+            <p>A350-1000 Upper Class, seat 1D, overnight to London Heathrow Terminal 3.</p>
+          </article>
+          <div class="connector"></div>
+          <article class="node hotel" tabindex="0" data-step="2" data-tippy-content="">
+            <div class="icon"><i data-lucide="building-2" size="22"></i></div>
+            <time>Tue Jun 16 · overnight</time>
+            <h3>Premier Inn Heathrow T4</h3>
+            <p>Clear UK border, collect bags, transfer T3 → T4, sleep near your Air Serbia terminal.</p>
+          </article>
+          <div class="connector"></div>
+          <article class="node" tabindex="0" data-step="3" data-tippy-content="">
+            <div class="icon"><i data-lucide="plane-takeoff" size="22"></i></div>
+            <time>Wed Jun 17 · 1:30 PM</time>
+            <h3>Air Serbia JU211 · LHR → BEG</h3>
+            <p>Terminal 4 departure, Economy Standard seat 11D, one checked bag included.</p>
+          </article>
+          <div class="connector"></div>
+          <article class="node serbia" tabindex="0" data-step="4" data-tippy-content="">
+            <div class="icon"><i data-lucide="map-pin-check" size="22"></i></div>
+            <time>Wed Jun 17 · 5:15 PM</time>
+            <h3>Arrive Belgrade</h3>
+            <p>Land at BEG Terminal 2 with the long-haul and Heathrow transfer stress behind you.</p>
+          </article>
+        </div>
+
+        <div class="drawer" id="drawer">
+          <div>
+            <h3 id="drawerTitle">SFO airport arrival</h3>
+            <p id="drawerText">Use Upper Class check-in, verify TSA PreCheck on the boarding pass, then enjoy the SFO Virgin Clubhouse before boarding.</p>
+          </div>
+          <span class="chip tag" id="drawerTag">Mon Jun 15</span>
+        </div>
+      </div>
     </section>
 
-    <nav class="tabs" aria-label="Itinerary sections">
-      <button class="tab active" data-tab="flight1">1 · SFO → LHR</button>
-      <button class="tab" data-tab="hotel">2 · Heathrow overnight</button>
-      <button class="tab" data-tab="flight2">3 · LHR → BEG</button>
-      <button class="tab" data-tab="todo">Must-do checklist</button>
-    </nav>
+    <section class="detail-grid">
+      <article class="detail-card">
+        <div class="detail-title"><i data-lucide="sparkles" size="24"></i><h3>Core itinerary details</h3></div>
+        <div class="facts">
+          <div class="fact"><div class="label">Long-haul</div><b>Virgin Atlantic VS0020</b></div>
+          <div class="fact"><div class="label">Aircraft</div><b>Airbus A350-1000</b></div>
+          <div class="fact"><div class="label">Cabin / seat</div><b>Upper Class · 1D</b></div>
+          <div class="fact"><div class="label">SFO → LHR</div><b>Mon 5:45 PM → Tue 12:05 PM</b></div>
+          <div class="fact"><div class="label">Hotel</div><b>Premier Inn Heathrow Airport Terminal 4</b></div>
+          <div class="fact"><div class="label">Hotel timing</div><b>Tue 3:00 PM → Wed 12:00 PM</b></div>
+          <div class="fact"><div class="label">Second flight</div><b>Air Serbia JU211 · A319</b></div>
+          <div class="fact"><div class="label">LHR → BEG</div><b>Wed 1:30 PM → 5:15 PM</b></div>
+        </div>
+      </article>
 
-    <section class="panel active" id="flight1">
-      <div class="panel-top">
-        <div><h2>Virgin Upper Class</h2><p>The comfort leg. Get to SFO early, enjoy the Clubhouse, then sleep across the Atlantic in seat 1D.</p></div>
-        <span class="pill">Terminal 3 arrival</span>
-      </div>
-      <div class="info-grid">
-        <div class="info"><div class="label">Flight</div><div class="value">Virgin Atlantic VS0020</div></div>
-        <div class="info"><div class="label">Aircraft</div><div class="value">Airbus A350-1000</div></div>
-        <div class="info"><div class="label">Cabin / seat</div><div class="value">Upper Class · 1D</div></div>
-        <div class="info"><div class="label">Baggage</div><div class="value">2 checked bags listed</div></div>
-      </div>
-      <div class="simple-flow">
-        <div class="flow-step"><div class="flow-time">Mon 2:45 PM</div><div>Arrive at SFO, use Upper Class check-in, and confirm TSA PreCheck appears on the boarding pass if eligible.</div></div>
-        <div class="flow-step"><div class="flow-time">Mon 5:45 PM</div><div>Depart SFO for London Heathrow on Virgin Atlantic VS0020.</div></div>
-        <div class="flow-step"><div class="flow-time">Tue 12:05 PM</div><div>Arrive at LHR Terminal 3, clear UK border, collect bags, then transfer to Terminal 4.</div></div>
-      </div>
-      <details><summary>Small upgrades that make this leg better</summary><div>Pre-order your Upper Class meal 7 days to 24 hours before departure. Use the SFO Virgin Clubhouse. Ask early onboard for the mattress topper and sleep suit if you plan to sleep.</div></details>
+      <article class="detail-card">
+        <div class="detail-title"><i data-lucide="gem" size="24"></i><h3>Must-do perks</h3></div>
+        <div class="tips">
+          <div class="tip"><i data-lucide="check-circle-2" size="18"></i><span>Pre-order your Virgin Upper Class meal when the window opens.</span></div>
+          <div class="tip"><i data-lucide="check-circle-2" size="18"></i><span>Add your Known Traveler Number / Global Entry PASS ID to Virgin.</span></div>
+          <div class="tip"><i data-lucide="check-circle-2" size="18"></i><span>Use the SFO Virgin Clubhouse before boarding.</span></div>
+          <div class="tip"><i data-lucide="check-circle-2" size="18"></i><span>Keep Serbian passport, green card, onward BEG ticket, and hotel confirmation offline.</span></div>
+        </div>
+      </article>
     </section>
 
-    <section class="panel" id="hotel">
-      <div class="panel-top">
-        <div><h2>Heathrow reset</h2><p>One night near Terminal 4. The goal is not luxury-hotel vibes — it is shower, sleep, and a zero-drama Air Serbia morning.</p></div>
-        <span class="pill">No taxi needed for T4 morning</span>
-      </div>
-      <div class="info-grid">
-        <div class="info"><div class="label">Hotel</div><div class="value">Premier Inn Heathrow Airport Terminal 4</div></div>
-        <div class="info"><div class="label">Room</div><div class="value">Standard Double Room</div></div>
-        <div class="info"><div class="label">Check-in</div><div class="value">Tue Jun 16 · 3:00 PM</div></div>
-        <div class="info"><div class="label">Check-out</div><div class="value">Wed Jun 17 · 12:00 PM</div></div>
-      </div>
-      <div class="simple-flow">
-        <div class="flow-step"><div class="flow-time">After arrival</div><div>Transfer from Terminal 3 to Terminal 4 and check in or drop bags if the room is not ready.</div></div>
-        <div class="flow-step"><div class="flow-time">Evening</div><div>Rest at Heathrow, or take the Elizabeth Line into London if you still have energy.</div></div>
-        <div class="flow-step"><div class="flow-time">Wed 10:30 AM</div><div>Head to Air Serbia check-in at Terminal 4. The flight leaves at 1:30 PM.</div></div>
-      </div>
-      <details><summary>Why this hotel choice works</summary><div>It is simple, practical, and close to the next departure terminal. You already used the premium spend on Virgin Upper Class; the hotel’s job is to keep the second travel day easy.</div></details>
-    </section>
-
-    <section class="panel" id="flight2">
-      <div class="panel-top">
-        <div><h2>Air Serbia to Belgrade</h2><p>Short Europe hop from Heathrow Terminal 4 to Belgrade. This is the practical positioning leg after the comfortable transatlantic flight.</p></div>
-        <span class="pill">Terminal 4 departure</span>
-      </div>
-      <div class="info-grid">
-        <div class="info"><div class="label">Flight</div><div class="value">Air Serbia JU211</div></div>
-        <div class="info"><div class="label">Aircraft</div><div class="value">Airbus A319</div></div>
-        <div class="info"><div class="label">Cabin / seat</div><div class="value">Economy Standard · 11D</div></div>
-        <div class="info"><div class="label">Baggage</div><div class="value">1 checked bag included</div></div>
-      </div>
-      <div class="simple-flow">
-        <div class="flow-step"><div class="flow-time">Wed 1:30 PM</div><div>Depart London Heathrow Terminal 4 on Air Serbia JU211.</div></div>
-        <div class="flow-step"><div class="flow-time">Wed 5:15 PM</div><div>Arrive Belgrade Terminal 2.</div></div>
-      </div>
-      <details><summary>Separate-ticket reminder</summary><div>Virgin and Air Serbia are separate tickets. Keep baggage within Air Serbia’s allowance for the second leg, and keep the onward ticket visible for UK transit/border questions.</div></details>
-    </section>
-
-    <section class="panel" id="todo">
-      <div class="panel-top">
-        <div><h2>Must-do checklist</h2><p>Keep this part boring and you’ll have a much smoother trip.</p></div>
-        <span class="pill">Before travel</span>
+    <section>
+      <div class="section-head">
+        <div><h2>Quick checklist</h2><p>Tap items to mark them done.</p></div>
       </div>
       <div class="checklist">
-        <div class="check">Add Known Traveler Number / Global Entry PASS ID to Virgin Atlantic.</div>
-        <div class="check">Pre-order Virgin Upper Class meal 7 days to 24 hours before departure.</div>
-        <div class="check">Save offline screenshots of flight, hotel, and onward-ticket confirmations.</div>
-        <div class="check">Carry Serbian passport, valid green card, and LHR → BEG proof together.</div>
-        <div class="check">Confirm Air Serbia baggage allowance before final packing.</div>
+        <div class="check">Add KTN / PASS ID to Virgin reservation.</div>
+        <div class="check">Pre-order Upper Class meal.</div>
+        <div class="check">Save all confirmations offline.</div>
+        <div class="check">Confirm Air Serbia baggage before packing.</div>
       </div>
-      <details><summary>Travel-day script for UK border</summary><div>“I am transiting to Serbia tomorrow. I have a confirmed onward flight from Heathrow to Belgrade and I’m staying overnight near Heathrow Terminal 4.”</div></details>
+      <div class="privacy">This page intentionally excludes PNRs, ticket numbers, hotel confirmation numbers, and payment info because it is public.</div>
     </section>
 
-    <p class="privacy">Privacy note: this public page intentionally excludes booking references, ticket numbers, hotel confirmation numbers, and payment details.</p>
-    <p class="footer">GitHub Pages · Confirmed itinerary · June 2026</p>
+    <div class="footer">GitHub Pages itinerary · built for quick reading + hover details</div>
   </main>
 
   <script>
-    const tabs = document.querySelectorAll('.tab');
-    const panels = document.querySelectorAll('.panel');
-    tabs.forEach(tab => tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById(tab.dataset.tab).classList.add('active');
-    }));
+    const summary = `Confirmed itinerary\nMon Jun 15: Virgin Atlantic VS0020, SFO to LHR, 5:45 PM to 12:05 PM +1, Airbus A350-1000, Upper Class seat 1D.\nTue Jun 16: Premier Inn Heathrow Airport Terminal 4, check-in 3:00 PM.\nWed Jun 17: Air Serbia JU211, LHR Terminal 4 to BEG Terminal 2, 1:30 PM to 5:15 PM, Airbus A319, Economy Standard seat 11D.`;
 
-    const summary = `Confirmed itinerary:\nMon Jun 15: Virgin Atlantic VS0020, SFO to LHR, 5:45 PM to 12:05 PM +1, Airbus A350-1000, Upper Class seat 1D.\nTue Jun 16: Premier Inn Heathrow Airport Terminal 4, check-in 3:00 PM.\nWed Jun 17: Air Serbia JU211, LHR Terminal 4 to BEG Terminal 2, 1:30 PM to 5:15 PM, Economy Standard seat 11D.`;
+    const steps = [
+      {
+        title:'SFO airport arrival',
+        tag:'Mon Jun 15 · suggested 2:45–3:00 PM',
+        text:'Use Virgin Upper Class check-in, verify TSA PreCheck on the boarding pass, then go to the SFO Virgin Clubhouse before boarding.',
+        tooltip:['Suggested airport arrival: 2:45–3:00 PM','Use Upper Class check-in','Confirm TSA PreCheck printed','Go to Virgin Clubhouse']
+      },
+      {
+        title:'Virgin Atlantic VS20 · SFO → LHR',
+        tag:'Mon 5:45 PM → Tue 12:05 PM',
+        text:'Your premium leg: Airbus A350-1000 Upper Class, seat 1D, arriving London Heathrow Terminal 3 with two checked bags listed on the ticket.',
+        tooltip:['Flight: Virgin Atlantic VS0020','Aircraft: Airbus A350-1000','Cabin: Upper Class','Seat: 1D','Arrival: LHR Terminal 3','Bags: 2 checked bags listed']
+      },
+      {
+        title:'Premier Inn Heathrow Airport Terminal 4',
+        tag:'Tue Jun 16 · check-in 3:00 PM',
+        text:'After landing, clear UK border, collect bags, transfer from Terminal 3 to Terminal 4, and sleep near the terminal for your Air Serbia flight.',
+        tooltip:['Hotel: Premier Inn Heathrow Airport Terminal 4','Room: Standard Double Room','Check-in: Tue 3:00 PM','Check-out: Wed 12:00 PM','Address: Terminal 4, Sheffield Road, Hounslow TW6 3FH']
+      },
+      {
+        title:'Air Serbia JU211 · LHR → BEG',
+        tag:'Wed Jun 17 · 1:30 PM → 5:15 PM',
+        text:'Second flight from Heathrow Terminal 4 to Belgrade Terminal 2 on Air Serbia. Economy Standard, seat 11D, one checked bag included.',
+        tooltip:['Flight: Air Serbia JU211','Aircraft: Airbus A319','Route: LHR T4 → BEG T2','Cabin: Economy Standard','Seat: 11D','Bags: 1 checked bag included']
+      },
+      {
+        title:'Arrive Belgrade',
+        tag:'Wed Jun 17 · 5:15 PM',
+        text:'Land at Belgrade Terminal 2 after a clean same-airport Heathrow overnight connection.',
+        tooltip:['Destination: Belgrade','Airport: BEG Terminal 2','Arrival: Wed 5:15 PM','Connection strategy: overnight buffer']
+      }
+    ];
+
+    function tooltipHTML(items, title){
+      return `<div class="tooltip-title">${title}</div><ul class="tooltip-list">${items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+    }
+
+    function setActive(index){
+      document.querySelectorAll('.node').forEach(n=>n.classList.remove('active'));
+      const node = document.querySelector(`.node[data-step="${index}"]`);
+      if(node) node.classList.add('active');
+      document.getElementById('drawerTitle').textContent = steps[index].title;
+      document.getElementById('drawerText').textContent = steps[index].text;
+      document.getElementById('drawerTag').textContent = steps[index].tag;
+      gsap.fromTo('#drawer',{y:8,opacity:.72},{y:0,opacity:1,duration:.24,ease:'power2.out'});
+    }
+
     async function copySummary(){
       try{ await navigator.clipboard.writeText(summary); alert('Itinerary summary copied.'); }
       catch(e){ prompt('Copy itinerary summary:', summary); }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+
+      document.querySelectorAll('.node').forEach((node) => {
+        const idx = Number(node.dataset.step);
+        node.setAttribute('data-tippy-content', tooltipHTML(steps[idx].tooltip, steps[idx].title));
+        node.addEventListener('click', () => setActive(idx));
+        node.addEventListener('mouseenter', () => setActive(idx));
+        node.addEventListener('focus', () => setActive(idx));
+      });
+
+      tippy('.node', {
+        allowHTML:true,
+        placement:'top',
+        animation:'shift-away',
+        delay:[80,0],
+        interactive:true,
+        maxWidth:340
+      });
+
+      document.querySelectorAll('.check').forEach(item => item.addEventListener('click', () => item.classList.toggle('done')));
+
+      gsap.from('.hero-card',{opacity:0,y:20,duration:.75,ease:'power3.out'});
+      gsap.from('.side-card',{opacity:0,y:20,duration:.75,delay:.12,ease:'power3.out'});
+      gsap.from('.node',{opacity:0,y:26,duration:.55,stagger:.08,delay:.25,ease:'power3.out'});
+      gsap.from('.detail-card',{opacity:0,y:18,duration:.55,stagger:.1,delay:.55,ease:'power3.out'});
+    });
   </script>
 </body>
 </html>

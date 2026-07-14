@@ -1,87 +1,94 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zurich Sister Trip · July 15–16, 2026</title>
-<meta name="description" content="Confirmed flights and a simple one-day Zurich itinerary for Luka and Mina.">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Luka & Mina in Zürich · July 15–16, 2026</title>
+<meta name="description" content="A simple travel page for Luka and Mina's one-night Zürich trip." />
 <style>
-:root{--bg:#07111e;--card:#0f2033;--card2:#122942;--text:#f7f4ec;--muted:#aebdca;--line:rgba(255,255,255,.13);--blue:#7fc8ff;--gold:#f6c86e;--green:#8ee2ae;--pink:#ff9fb0;--shadow:0 24px 70px rgba(0,0,0,.32)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0,rgba(127,200,255,.19),transparent 28%),radial-gradient(circle at 88% 4%,rgba(246,200,110,.15),transparent 28%),linear-gradient(145deg,#06101c,#091727 55%,#050b12);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}.wrap{width:min(1080px,92vw);margin:auto}.hero{padding:56px 0 28px}.eyebrow{display:inline-flex;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:rgba(255,255,255,.05);font-size:12px;text-transform:uppercase;letter-spacing:.08em}.hero h1{font-size:clamp(44px,7vw,86px);line-height:.92;letter-spacing:-.065em;margin:20px 0 14px;max-width:900px}.hero p{color:var(--muted);font-size:clamp(17px,2vw,21px);line-height:1.55;max-width:780px;margin:0}.nav{position:sticky;top:0;z-index:10;background:rgba(6,16,28,.82);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid var(--line)}.navin{display:flex;gap:9px;overflow:auto;padding:11px 0}.nav a{white-space:nowrap;text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:9px 12px;font-size:13px;background:rgba(255,255,255,.04)}section{padding:32px 0}.sectionhead{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:18px}.sectionhead h2{font-size:clamp(30px,4vw,50px);letter-spacing:-.045em;margin:0}.sectionhead p{max-width:520px;color:var(--muted);line-height:1.5;margin:0}.glass{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.045));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);backdrop-filter:blur(14px)}
-.tripgraphic{padding:26px;overflow:hidden}.daylabel{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--gold);font-weight:800;margin-bottom:17px}.sharedflight{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:18px}.airport{text-align:center}.code{font-size:clamp(48px,8vw,86px);font-weight:900;letter-spacing:-.07em}.city{color:var(--muted);margin-top:4px}.plane{min-width:170px;text-align:center;position:relative}.plane:before{content:"";height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);position:absolute;left:0;right:0;top:50%}.plane span{position:relative;display:inline-grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#12283e;border:1px solid rgba(127,200,255,.45);font-size:25px;box-shadow:0 0 30px rgba(127,200,255,.2)}.flightmeta{text-align:center;color:var(--muted);line-height:1.6;margin-top:17px}.travelers{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:14px}.traveler{padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);font-size:13px}.traveler.luka{color:#d8efff;border-color:rgba(127,200,255,.35)}.traveler.mina{color:#ffd7df;border-color:rgba(255,159,176,.35)}
-.splitroutes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}.routecard{padding:22px;position:relative;overflow:hidden}.routecard:after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;right:-55px;top:-65px;background:radial-gradient(circle,rgba(255,255,255,.11),transparent 68%)}.person{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;margin-bottom:15px}.person:before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor}.person.luka{color:var(--blue)}.person.mina{color:var(--pink)}.routebig{font-size:34px;font-weight:900;letter-spacing:-.045em}.routearrow{color:var(--muted);margin:0 7px}.datetime{font-size:20px;font-weight:750;margin-top:8px}.detail{color:var(--muted);line-height:1.55;margin-top:12px}.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.pill{font-size:12px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.045);color:#dce6ef}.good{border-color:rgba(142,226,174,.32);color:#d9ffe6}.warn{border-color:rgba(255,159,176,.3);color:#ffd8df}
-.timeline{display:grid;gap:13px}.item{display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:stretch}.icon{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid rgba(246,200,110,.35);background:rgba(246,200,110,.1);font-size:21px;margin:7px auto 0}.body{padding:18px 20px}.when{color:var(--gold);font-size:12px;font-weight:850;text-transform:uppercase;letter-spacing:.07em}.body h3{margin:5px 0 0;font-size:20px}.body p{margin:8px 0 0;color:var(--muted);line-height:1.5}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn{color:var(--text);text-decoration:none;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:8px 10px;background:rgba(255,255,255,.045)}
-.info{display:grid;grid-template-columns:1fr 1fr;gap:16px}.box{padding:22px}.box h3{margin:0 0 12px;font-size:22px}.row{display:flex;justify-content:space-between;gap:20px;border-top:1px solid rgba(255,255,255,.09);padding:12px 0;color:var(--muted)}.row b{color:var(--text);text-align:right}.notice{padding:15px 17px;border:1px solid rgba(255,159,176,.28);background:rgba(255,159,176,.07);border-radius:18px;color:#ffdce2;line-height:1.5;margin-top:14px}.checklist{display:grid;gap:9px}.check{display:flex;gap:11px;padding:12px;border:1px solid rgba(255,255,255,.09);border-radius:17px;background:rgba(255,255,255,.035);color:var(--muted);line-height:1.4}.check b{color:var(--text)}.check input{margin-top:3px}.foot{color:var(--muted);font-size:12px;line-height:1.5;padding:34px 0 60px}@media(max-width:760px){.sectionhead{display:block}.sectionhead p{margin-top:9px}.splitroutes,.info{grid-template-columns:1fr}.plane{min-width:75px}.sharedflight{gap:6px}.code{font-size:46px}.city{font-size:12px}.routebig{font-size:29px}.item{grid-template-columns:48px 1fr}}
+:root{--ink:#25312e;--muted:#6f7d78;--cream:#fffaf2;--paper:#fffdf9;--sage:#dcebdc;--blue:#dcecf6;--pink:#f6dfe7;--yellow:#f7e9b9;--line:#d9dfda;--shadow:0 18px 50px rgba(73,88,80,.12)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(#f9fbf7,#fffaf2);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{width:min(980px,92vw);margin:auto}.hero{padding:54px 0 28px;text-align:center}.eyebrow{display:inline-flex;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.8);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(46px,8vw,86px);line-height:.95;letter-spacing:-.055em;margin:18px 0 14px;font-weight:500}.sub{max-width:680px;margin:auto;color:var(--muted);font-size:18px;line-height:1.55}.card{background:rgba(255,253,249,.9);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow)}section{padding:24px 0}.section-title{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:14px}.section-title h2{font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,5vw,48px);font-weight:500;letter-spacing:-.035em;margin:0}.section-title p{margin:0;color:var(--muted);max-width:450px;line-height:1.45}.flight-board{padding:22px}.day{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}.shared{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;padding:28px;border-radius:22px;background:linear-gradient(135deg,var(--blue),#eef7fb)}.airport{text-align:center}.code{font-size:clamp(48px,9vw,82px);font-weight:800;letter-spacing:-.07em}.city{color:var(--muted);margin-top:2px}.plane{position:relative;min-width:150px;text-align:center}.plane:before{content:"";position:absolute;height:2px;left:0;right:0;top:50%;background:linear-gradient(90deg,transparent,#7f9fb0,transparent)}.plane span{position:relative;display:inline-grid;place-items:center;width:54px;height:54px;border-radius:50%;background:white;border:1px solid #c9dbe4;font-size:26px}.meta{text-align:center;color:var(--muted);line-height:1.55;margin-top:16px}.people{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}.chip{padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:white;font-size:13px}.luka{background:var(--blue)}.mina{background:var(--pink)}.split{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.route{padding:22px}.route .person{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.route-big{font-size:36px;font-weight:800;letter-spacing:-.05em;margin-top:10px}.time{font-size:20px;font-weight:700;margin-top:6px}.detail{color:var(--muted);line-height:1.5;margin-top:9px}.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.tag{padding:7px 10px;border-radius:999px;background:#f5f7f4;border:1px solid var(--line);font-size:12px}.hotel{display:grid;grid-template-columns:1.1fr .9fr;overflow:hidden}.hotel-main{padding:28px}.hotel-art{min-height:280px;background:radial-gradient(circle at 25% 20%,rgba(255,255,255,.8),transparent 24%),linear-gradient(150deg,var(--sage),#edf5ea 58%,var(--yellow));display:grid;place-items:center;position:relative;overflow:hidden}.hotel-art:before,.hotel-art:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.55)}.hotel-art:before{width:180px;height:180px;left:-45px;bottom:-55px}.hotel-art:after{width:120px;height:120px;right:-25px;top:-35px}.hotel-icon{font-size:92px;filter:drop-shadow(0 12px 18px rgba(55,75,65,.15));z-index:1}.hotel h3{font-family:Georgia,"Times New Roman",serif;font-size:38px;font-weight:500;margin:0 0 8px}.address{color:var(--muted);line-height:1.55}.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.fact{padding:13px 14px;border-radius:16px;background:#f7f8f4;border:1px solid var(--line)}.fact small{display:block;color:var(--muted);margin-bottom:3px}.fact b{font-size:15px}.timeline{display:grid;gap:12px}.item{display:grid;grid-template-columns:52px 1fr;gap:12px}.icon{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:white;border:1px solid var(--line);box-shadow:0 8px 20px rgba(73,88,80,.08);font-size:21px;margin-top:8px}.item-body{padding:18px 20px}.when{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}.item h3{margin:5px 0 0;font-size:20px}.item p{margin:7px 0 0;color:var(--muted);line-height:1.5}.morning{display:grid;grid-template-columns:1fr 1fr;gap:14px}.person-card{padding:22px}.person-card h3{margin:0 0 10px;font-size:24px}.bigtime{font-size:42px;font-weight:800;letter-spacing:-.05em}.note{color:var(--muted);line-height:1.5}.privacy{font-size:12px;color:var(--muted);text-align:center;padding:20px 0 52px;line-height:1.5}@media(max-width:760px){.section-title{display:block}.section-title p{margin-top:8px}.split,.hotel,.morning{grid-template-columns:1fr}.shared{grid-template-columns:1fr auto 1fr;padding:20px 12px}.plane{min-width:62px}.code{font-size:48px}.hotel-art{min-height:190px}.facts{grid-template-columns:1fr}.route-big{font-size:31px}}
 </style>
 </head>
 <body>
 <header class="hero wrap">
-  <span class="eyebrow">Zurich sister trip · July 15–16, 2026</span>
-  <h1>One day together in Zurich.</h1>
-  <p>Luka and Mina fly in together from Belgrade, spend the afternoon and evening exploring Zurich, then head in different directions the next day.</p>
+  <span class="eyebrow">July 15–16, 2026 · Zürich</span>
+  <h1>Luka & Mina's little Zürich trip ✿</h1>
+  <p class="sub">One flight in together, one night in Zürich, then two different flights home.</p>
 </header>
-<nav class="nav"><div class="wrap navin"><a href="#flights">Flights</a><a href="#itinerary">Zurich plan</a><a href="#airport">Airport morning</a><a href="#checklist">Checklist</a></div></nav>
+
 <main class="wrap">
-<section id="flights">
-  <div class="sectionhead"><h2>Flight plan</h2><p>A simple view of the shared inbound flight and the two separate departures on July 16.</p></div>
-  <div class="glass tripgraphic">
-    <div class="daylabel">Together · Wednesday, July 15</div>
-    <div class="sharedflight">
+<section>
+  <div class="section-title"><h2>Getting there</h2><p>Same flight, same arrival, same hotel.</p></div>
+  <div class="card flight-board">
+    <div class="day">Wednesday · July 15</div>
+    <div class="shared">
       <div class="airport"><div class="code">BEG</div><div class="city">Belgrade</div></div>
       <div class="plane"><span>✈</span></div>
-      <div class="airport"><div class="code">ZRH</div><div class="city">Zurich</div></div>
+      <div class="airport"><div class="code">ZRH</div><div class="city">Zürich</div></div>
     </div>
-    <div class="flightmeta"><b>Air Serbia JU332</b> · 12:00 PM → 1:50 PM · 1h 50m · Embraer 195 · Economy</div>
-    <div class="travelers"><span class="traveler luka">Luka</span><span class="traveler mina">Mina</span></div>
+    <div class="meta"><b>Air Serbia JU332</b> · 12:00 PM → 1:50 PM · 1h 50m · Embraer 195 · Economy</div>
+    <div class="people"><span class="chip luka">Luka</span><span class="chip mina">Mina</span></div>
   </div>
-  <div class="splitroutes">
-    <article class="glass routecard">
-      <div class="person luka">Luka · Thursday, July 16</div>
-      <div class="routebig">ZRH <span class="routearrow">→</span> SFO</div>
-      <div class="datetime">1:15 PM → 4:15 PM</div>
-      <div class="detail">SWISS <b>LX38</b> · Boeing 777-300ER · Business · 12h · Seat 7A throne.</div>
-      <div class="pills"><span class="pill good">Business class</span><span class="pill">88,000 miles</span><span class="pill">2 checked bags included</span></div>
-    </article>
-    <article class="glass routecard">
-      <div class="person mina">Mina · Thursday, July 16</div>
-      <div class="routebig">ZRH <span class="routearrow">→</span> BEG</div>
-      <div class="datetime">12:10 PM → 1:55 PM</div>
-      <div class="detail">SWISS <b>LX1416</b> · operated by airBaltic on behalf of SWISS · Economy Light.</div>
-      <div class="pills"><span class="pill">Carry-on: 1 × 8 kg</span><span class="pill warn">No free checked bag</span></div>
-    </article>
-  </div>
-  <p style="color:var(--muted);font-size:12px;line-height:1.5;margin-top:14px">Private booking codes, ticket numbers, payment details, phone numbers and email addresses are intentionally excluded because this page is public.</p>
 </section>
-<section id="itinerary">
-  <div class="sectionhead"><h2>One-day Zurich itinerary</h2><p>Designed to be scenic but easy after the flight, with no complicated detours.</p></div>
+
+<section>
+  <div class="section-title"><h2>Staying here</h2><p>Confirmed reservation for both of you.</p></div>
+  <div class="card hotel">
+    <div class="hotel-main">
+      <div class="day">1 night · 2 adults</div>
+      <h3>Bristol Hotel</h3>
+      <div class="address">Stampfenbachstrasse 34<br>Zürich 8006, Switzerland</div>
+      <div class="facts">
+        <div class="fact"><small>Check-in</small><b>Wed Jul 15 · 2:00 PM</b></div>
+        <div class="fact"><small>Check-out</small><b>Thu Jul 16 · 11:30 AM</b></div>
+        <div class="fact"><small>Room</small><b>Standard Quadruple Room</b></div>
+        <div class="fact"><small>Reservation</small><b>Confirmed · non-smoking</b></div>
+      </div>
+    </div>
+    <div class="hotel-art"><div class="hotel-icon">🏨</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-title"><h2>One afternoon in Zürich</h2><p>Easy, scenic, and not too packed after travel.</p></div>
   <div class="timeline">
-    <div class="item"><div class="icon">🧳</div><div class="glass body"><div class="when">1:50–3:15 PM</div><h3>Land, reach the hotel, drop bags</h3><p>Take a taxi/Uber to the hotel because of the heavy luggage. Check in, freshen up and leave the bags behind before walking.</p></div></div>
-    <div class="item"><div class="icon">🏛️</div><div class="glass body"><div class="when">3:30–5:15 PM</div><h3>Bahnhofstrasse, Augustinergasse and Lindenhof</h3><p>Start with central Zurich’s polished shopping street, then move into the prettier old lanes and the Lindenhof viewpoint over the Limmat.</p><div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Lindenhof+Zurich">Lindenhof map</a></div></div></div>
-    <div class="item"><div class="icon">⛪</div><div class="glass body"><div class="when">5:15–6:30 PM</div><h3>Old Town, river and iconic churches</h3><p>Walk through Münsterhof, Fraumünster and across the river toward Grossmünster and Limmatquai.</p></div></div>
-    <div class="item"><div class="icon">🌊</div><div class="glass body"><div class="when">6:30–7:30 PM</div><h3>Lake Zurich promenade</h3><p>Continue to Bürkliplatz or Bellevue for an easy golden-hour lake walk and photos.</p><div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Bürkliplatz+Zurich">Bürkliplatz map</a></div></div></div>
-    <div class="item"><div class="icon">🍽️</div><div class="glass body"><div class="when">7:30–9:00 PM</div><h3>Swiss dinner</h3><p>Good simple options: Zeughauskeller for traditional Swiss dishes, Zunfthaus zur Waag for something more polished, or Sternen Grill for casual food.</p></div></div>
-    <div class="item"><div class="icon">🌙</div><div class="glass body"><div class="when">9:00 PM onward</div><h3>Short Niederdorf walk, then sleep</h3><p>Enjoy a final old-town stroll but keep the night easy. Both departures are around noon the next day.</p></div></div>
+    <div class="item"><div class="icon">🧳</div><div class="card item-body"><div class="when">1:50–3:15 PM</div><h3>Land, taxi to Bristol Hotel, drop bags</h3><p>Keep it easy with the heavy luggage, check in, and freshen up.</p></div></div>
+    <div class="item"><div class="icon">🏘️</div><div class="card item-body"><div class="when">3:30–5:30 PM</div><h3>Walk into Old Town</h3><p>Head toward Central, Niederdorf, the Limmat river, Lindenhof, and the little old streets.</p></div></div>
+    <div class="item"><div class="icon">🌊</div><div class="card item-body"><div class="when">5:30–7:00 PM</div><h3>River + Lake Zürich</h3><p>Continue toward Grossmünster, Bellevue, and the lake for golden-hour views.</p></div></div>
+    <div class="item"><div class="icon">🍽️</div><div class="card item-body"><div class="when">7:00–9:00 PM</div><h3>Swiss dinner</h3><p>Have a proper dinner, wander a little more, then head back before the airport morning.</p></div></div>
   </div>
 </section>
-<section id="airport">
-  <div class="sectionhead"><h2>Airport morning</h2><p>You can travel to ZRH together, then split for Mina’s Belgrade flight and Luka’s San Francisco flight.</p></div>
-  <div class="info">
-    <div class="glass box"><h3>Recommended timing</h3><div class="row"><span>Leave hotel</span><b>8:45–9:00 AM</b></div><div class="row"><span>Arrive ZRH</span><b>About 9:30 AM</b></div><div class="row"><span>Mina departs</span><b>12:10 PM</b></div><div class="row"><span>Luka departs</span><b>1:15 PM</b></div><p class="notice">Arriving by roughly 9:30 AM gives Mina a comfortable international-flight buffer and still gives Luka plenty of lounge time.</p></div>
-    <div class="glass box"><h3>Baggage difference</h3><div class="row"><span>Luka</span><b>2 checked bags included</b></div><div class="row"><span>Mina</span><b>No free checked baggage</b></div><div class="row"><span>Mina carry-on</span><b>1 piece up to 8 kg</b></div><p class="notice">If Mina needs to check a suitcase, add baggage with SWISS before airport day rather than paying or sorting it out at the counter.</p></div>
+
+<section>
+  <div class="section-title"><h2>Then you split</h2><p>Both flights leave from ZRH on Thursday, July 16.</p></div>
+  <div class="split">
+    <article class="card route">
+      <div class="person">Luka</div>
+      <div class="route-big">ZRH → SFO</div>
+      <div class="time">1:15 PM → 4:15 PM</div>
+      <div class="detail">SWISS <b>LX38</b> · Business Class · seat 7A · Zürich to San Francisco.</div>
+      <div class="tags"><span class="tag">Business class</span><span class="tag">Seat 7A</span></div>
+    </article>
+    <article class="card route">
+      <div class="person">Mina</div>
+      <div class="route-big">ZRH → BEG</div>
+      <div class="time">12:10 PM → 1:55 PM</div>
+      <div class="detail">SWISS <b>LX1416</b> · Economy Light · operated by airBaltic on behalf of SWISS.</div>
+      <div class="tags"><span class="tag">1 × 8 kg carry-on</span><span class="tag">No free checked bag</span></div>
+    </article>
   </div>
 </section>
-<section id="checklist">
-  <div class="sectionhead"><h2>Quick checklist</h2><p>Selections save on this device.</p></div>
-  <div class="glass box checklist" id="checks">
-    <label class="check"><input type="checkbox" data-k="hotel"><span><b>Book a twin room with two real beds</b><br>Confirm air conditioning, elevator and easy taxi access.</span></label>
-    <label class="check"><input type="checkbox" data-k="ju"><span><b>Check in both travelers for JU332</b><br>Make sure Luka and Mina have their separate confirmations available.</span></label>
-    <label class="check"><input type="checkbox" data-k="mina"><span><b>Confirm Mina’s baggage plan</b><br>Economy Light includes no free checked suitcase.</span></label>
-    <label class="check"><input type="checkbox" data-k="lx"><span><b>Check in for both SWISS departures</b><br>Confirm Mina’s LX1416 and Luka’s LX38 seat 7A.</span></label>
-    <label class="check"><input type="checkbox" data-k="taxi"><span><b>Arrange airport ride for July 16</b><br>Aim to reach ZRH around 9:30 AM.</span></label>
+
+<section>
+  <div class="section-title"><h2>Airport morning</h2><p>Go together, then split after check-in.</p></div>
+  <div class="morning">
+    <div class="card person-card"><div class="person">Together</div><div class="bigtime">8:45–9:00</div><p class="note">Leave Bristol Hotel for ZRH. With luggage, taxi/Uber is the simplest.</p></div>
+    <div class="card person-card"><div class="person">At ZRH</div><div class="bigtime">≈ 9:30</div><p class="note">Plenty of buffer for Mina's 12:10 departure and Luka's 1:15 long-haul flight.</p></div>
   </div>
 </section>
+
+<div class="privacy">Only current confirmed travel plans are shown. Canceled bookings, confirmation codes, ticket numbers, payment details, phone numbers, and email addresses are intentionally excluded from this public page.</div>
 </main>
-<footer class="wrap foot">Flight details were taken from confirmed booking emails. All times shown are local. This public page excludes sensitive reservation and payment information.</footer>
-<script>document.querySelectorAll('#checks input').forEach(x=>{let k='zurich-trip-'+x.dataset.k;x.checked=localStorage.getItem(k)==='1';x.addEventListener('change',()=>localStorage.setItem(k,x.checked?'1':'0'))})</script>
 </body>
 </html>

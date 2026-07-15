@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zurich Tonight V2 · Food, Shopping & Lake</title>
+  <meta name="description" content="A live Zurich afternoon itinerary from Bristol Hotel with Swiss food, niche fragrance shopping, Bahnhofstrasse, Old Town and Lake Zurich." />
+  <style>
+    :root{
+      --cream:#fffaf4;--paper:#fffefd;--ink:#27231f;--muted:#756d66;--line:#eadfd5;
+      --cherry:#d64f57;--rose:#efb6bf;--sky:#b8dce8;--lake:#dff2f7;--gold:#e5b963;--sage:#a9bea3;
+      --shadow:0 20px 60px rgba(76,52,36,.13);
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;background:radial-gradient(circle at 0 0,#fde5e3 0,transparent 28rem),radial-gradient(circle at 100% 12%,#dff3f8 0,transparent 30rem),var(--cream);color:var(--ink);line-height:1.5}
+    .wrap{max-width:1000px;margin:auto;padding:20px 16px 64px}.hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:32px;padding:28px;background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(255,248,240,.8));box-shadow:var(--shadow)}
+    .hero:after{content:"✦";position:absolute;right:30px;top:18px;font-size:74px;color:rgba(214,79,87,.12)}.eyebrow{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:#fff9f5;color:var(--muted);font-size:.76rem;font-weight:900;text-transform:uppercase;letter-spacing:.09em}.hero h1{font-size:clamp(2.8rem,8vw,5.4rem);letter-spacing:-.075em;line-height:.91;margin:17px 0 14px;max-width:840px}.hero p{font-size:1.04rem;color:var(--muted);max-width:760px;margin:0}.pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.pill{padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.8);font-size:.86rem}
+    .route-art{margin-top:26px;display:grid;grid-template-columns:auto 1fr auto 1fr auto;align-items:center;gap:10px}.route-art span{font-size:.8rem;font-weight:900}.line{height:3px;border-radius:999px;background:linear-gradient(90deg,var(--rose),var(--gold),var(--sky));position:relative}.line:after{content:"➜";position:absolute;right:42%;top:50%;transform:translateY(-58%);color:var(--cherry);font-size:18px}
+    .nav{position:sticky;top:8px;z-index:20;margin:14px 0;padding:7px;border:1px solid var(--line);border-radius:999px;background:rgba(255,250,244,.9);backdrop-filter:blur(14px)}.nav div{display:flex;gap:6px;overflow:auto}.nav a{white-space:nowrap;text-decoration:none;color:var(--muted);padding:8px 11px;border-radius:999px;font-size:.84rem}.nav a:hover{background:#fff;color:var(--ink)}
+    h2{font-size:1.55rem;letter-spacing:-.04em;margin:30px 0 14px}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.card{background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 10px 28px rgba(76,52,36,.07)}.card b{display:block}.card span{color:var(--muted);font-size:.88rem}
+    .note{border:1px solid #ebd29f;background:#fff8e8;border-radius:18px;padding:14px 16px;color:#665638}.note strong{color:#3f3323}
+    .timeline{position:relative;padding-left:28px}.timeline:before{content:"";position:absolute;left:10px;top:14px;bottom:20px;width:3px;border-radius:999px;background:linear-gradient(var(--cherry),var(--gold),var(--rose),var(--sky),var(--sage))}.stop{position:relative;margin-bottom:15px;padding:18px;border-radius:24px;border:1px solid var(--line);background:rgba(255,255,255,.88);box-shadow:0 12px 34px rgba(76,52,36,.08)}.stop:before{content:"";position:absolute;left:-24px;top:24px;width:13px;height:13px;border-radius:50%;background:#fff;border:4px solid var(--cherry);box-shadow:0 0 0 4px var(--cream)}.stop:nth-child(2):before{border-color:var(--gold)}.stop:nth-child(3):before{border-color:var(--rose)}.stop:nth-child(4):before{border-color:var(--sky)}.stop:nth-child(5):before{border-color:var(--sage)}.stop:nth-child(6):before{border-color:var(--cherry)}.stop:nth-child(7):before{border-color:var(--gold)}.time{font-size:.78rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--cherry)}.stop h3{font-size:1.18rem;letter-spacing:-.025em;margin:4px 0 6px}.stop p{margin:0;color:var(--muted)}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.chip{padding:6px 9px;border:1px solid var(--line);background:#fff8f3;border-radius:999px;color:#5d544e;font-size:.78rem}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border-radius:999px;text-decoration:none;font-weight:850;font-size:.83rem;background:var(--ink);color:#fff}.btn.alt{background:#fff;color:var(--ink);border:1px solid var(--line)}
+    .shopgrid,.foodgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.shop,.food{border:1px solid var(--line);border-radius:22px;background:#fff;padding:17px}.shop h3,.food h3{margin:0 0 6px}.shop p,.food p{margin:0;color:var(--muted)}.shop a,.food a{display:inline-block;margin-top:10px;color:var(--cherry);font-weight:800;text-decoration:none}
+    .map{position:relative;min-height:320px;overflow:hidden;border-radius:30px;border:1px solid var(--line);background:linear-gradient(140deg,#f8eee5 0 46%,#d8eef5 46% 60%,#f8eee5 60%);box-shadow:var(--shadow)}.river{position:absolute;left:46%;top:-20%;width:14%;height:150%;background:linear-gradient(#c7e8f2,#abd7e7);transform:rotate(7deg);border-left:5px solid rgba(255,255,255,.65);border-right:5px solid rgba(255,255,255,.65)}.path{position:absolute;left:18%;top:14%;width:64%;height:70%;border:3px dashed rgba(214,79,87,.65);border-radius:45% 55% 48% 53%;transform:rotate(-9deg)}.pin{position:absolute;transform:translate(-50%,-50%);padding:7px 9px;border:1px solid var(--line);border-radius:999px;background:#fff;box-shadow:0 8px 22px rgba(76,52,36,.13);font-size:.72rem;font-weight:850;white-space:nowrap}.pin:before{content:"●";color:var(--cherry);margin-right:5px}.p1{left:28%;top:15%}.p2{left:53%;top:28%}.p3{left:26%;top:42%}.p4{left:34%;top:60%}.p5{left:58%;top:70%}.p6{left:70%;top:84%}.footer{text-align:center;color:var(--muted);font-size:.81rem;margin-top:28px}
+    @media(max-width:760px){.summary{grid-template-columns:repeat(2,1fr)}.shopgrid,.foodgrid{grid-template-columns:1fr}.hero{padding:22px}.hero h1{font-size:3.15rem}.route-art{grid-template-columns:1fr}.line{display:none}.map{min-height:270px}.pin{font-size:.65rem}.p1{left:25%}.p2{left:57%}.p3{left:27%}.p4{left:34%}.p5{left:60%}.p6{left:69%}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Zurich today · Luka + Mina · V2</span>
+    <h1>Swiss food first. Shop before closing. Finish by the lake.</h1>
+    <p>You are starting at Bristol Hotel around 3:30 PM. This version puts the time-sensitive shopping immediately after food, then gives you a relaxed route through Old Town and down to Lake Zurich.</p>
+    <div class="pillrow"><span class="pill">🧀 Mina: fondue or raclette</span><span class="pill">🥩 Luka: schnitzel or meat</span><span class="pill">🧴 Niche fragrance</span><span class="pill">👜 Bahnhofstrasse</span><span class="pill">🌊 Lake sunset</span></div>
+    <div class="route-art"><span>Bristol</span><div class="line"></div><span>Food + shopping</span><div class="line"></div><span>Old Town + lake</span></div>
+  </section>
+
+  <nav class="nav"><div><a href="#route">Live route</a><a href="#shopping">Shopping</a><a href="#food">What to order</a><a href="#map">Visual map</a></div></nav>
+
+  <h2>Tonight at a glance</h2>
+  <section class="summary">
+    <div class="card"><b>1. Eat</b><span>Swiss Chuchi solves both food preferences.</span></div>
+    <div class="card"><b>2. Shop</b><span>Osswald, Globus and Bahnhofstrasse before closing.</span></div>
+    <div class="card"><b>3. Explore</b><span>Lindenhof, Münsterhof and the river.</span></div>
+    <div class="card"><b>4. Finish</b><span>Bürkliplatz or Bellevue by the lake.</span></div>
+  </section>
+
+  <p class="note"><strong>Priority:</strong> do not save shopping for late evening. Zurich shops tend to close earlier than major US cities, so browse fragrance and luxury stores first, then sightsee when nothing is time-sensitive.</p>
+
+  <h2 id="route">Your live itinerary</h2>
+  <section class="timeline">
+    <article class="stop">
+      <div class="time">3:35–3:55 PM</div>
+      <h3>Walk: Bristol Hotel → Swiss Chuchi</h3>
+      <p>Head through Central into Niederdorf. This gets you directly into Old Town and avoids wasting time on transport.</p>
+      <div class="chips"><span class="chip">~15-minute walk</span><span class="chip">Easy first leg</span></div>
+      <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Bristol+Hotel,+Stampfenbachstrasse+34,+Zurich&destination=Swiss+Chuchi,+Rosengasse+10,+Zurich&travelmode=walking">📍 Start directions</a></div>
+    </article>
+
+    <article class="stop">
+      <div class="time">4:00–5:00 PM</div>
+      <h3>Early meal at Swiss Chuchi</h3>
+      <p>Mina can get the full cheesy Swiss experience; Luka can choose schnitzel, sausage or a plain meat dish. Eating early is completely normal enough in Zurich and gives you the best use of the remaining shopping hours.</p>
+      <div class="chips"><span class="chip">Mina: fondue / raclette</span><span class="chip">Luka: schnitzel / meat</span><span class="chip">No cream or cheese: “Keine Rahmsauce und kein Käse”</span></div>
+      <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Swiss+Chuchi+Zurich">🍽️ Open in Maps</a></div>
+    </article>
+
+    <article class="stop">
+      <div class="time">5:00–5:20 PM</div>
+      <h3>Walk to Osswald Parfumerie</h3>
+      <p>Cross toward Bahnhofstrasse for Zurich’s most worthwhile fragrance stop. Osswald is the priority because it is more distinctive than a generic department-store beauty hall.</p>
+      <div class="chips"><span class="chip">Niche fragrance</span><span class="chip">Luxury skincare</span><span class="chip">Curated Swiss boutique</span></div>
+      <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Swiss+Chuchi,+Rosengasse+10,+Zurich&destination=Osswald+Parfumerie,+Bahnhofstrasse+17,+Zurich&travelmode=walking">📍 Directions to Osswald</a></div>
+    </article>
+
+    <article class="stop">
+      <div class="time">5:20–5:50 PM</div>
+      <h3>Osswald Parfumerie</h3>
+      <p>Smell a few unusual fragrances rather than rushing through dozens. Ask the staff for three recommendations based on notes you already like.</p>
+      <div class="chips"><span class="chip">Best niche stop</span><span class="chip">Ask for exclusives</span><span class="chip">30 minutes max</span></div>
+      <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Osswald+Parfumerie+Bahnhofstrasse+17+Zurich">🧴 Open boutique</a></div>
+    </article>
+
+    <article class="stop">
+      <div class="time">5:50–6:25 PM</div>
+      <h3>Globus + Bahnhofstrasse browse</h3>
+      <p>Use Globus for a polished department-store browse, then walk south along Bahnhofstrasse for LV, watches, Swiss brands and window-shopping. Only enter stores that genuinely interest you.</p>
+      <div class="chips"><span class="chip">Beauty + fragrance</span><span class="chip">Luxury fashion</span><span class="chip">Rolex / Bucherer / Beyer</span></div>
+      <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Osswald+Parfumerie,+Zurich&destination=Paradeplatz,+Zurich&travelmode=walking&waypoints=Globus+Zurich,+Bahnhofstrasse">📍 Shopping walk</a><a class="btn alt" target="_blank" href="https://www.google.com/maps/search/?api=1&query=luxury+shopping+Bahnhofstrasse+Zurich">Browse nearby stores</a></div>
+    </article>
+
+    <article class="stop">
+      <div class="time">6:25–7:00 PM</div>
+      <h3>Paradeplatz → Münsterhof → Lindenhof</h3>
+      <p>Switch from shopping to sightseeing. See the elegant squares, Fraumünster exterior, river views and the elevated Lindenhof viewpoint over Old Town.</p>
+      <div class="chips"><span class="chip">Historic square</span><span class="chip">River views</span><span class="chip">Best central viewpoint</span></div>
+      <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Paradeplatz,+Zurich&destination=Lindenhof,+Zurich&travelmode=walking&waypoints=Munsterhof,+Zurich">📍 Scenic route</a></div>
+    </article>
+
+    <article class="stop">
+      <div class="time">7:00–7:40 PM</div>
+      <h3>Limmat river → Grossmünster → Bellevue</h3>
+      <p>Cross through the postcard section of Zurich, pass the twin towers of Grossmünster and continue south toward the lake.</p>
+      <div class="chips"><span class="chip">Classic Zurich views</span><span class="chip">Old Town façades</span><span class="chip">Easy downhill finish</span></div>
+      <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Lindenhof,+Zurich&destination=Bellevueplatz,+Zurich&travelmode=walking&waypoints=Grossmunster,+Zurich">📍 Walk to Bellevue</a></div>
+    </article>
+
+    <article class="stop">
+      <div class="time">7:40 PM onward</div>
+      <h3>Lake Zurich + optional chocolate</h3>
+      <p>Sit by the water at Bellevue or Bürkliplatz, take photos and relax. If you still want something sweet, search for an open Sprüngli location or pick up Swiss chocolate on the way back.</p>
+      <div class="chips"><span class="chip">Golden-hour lake</span><span class="chip">Sit, don’t rush</span><span class="chip">Optional chocolate</span></div>
+      <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Bellevueplatz,+Zurich&destination=Burkliplatz,+Zurich&travelmode=walking">📍 Lake walk</a><a class="btn alt" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Sprungli+near+Bellevue+Zurich">🍫 Find Sprüngli</a></div>
+    </article>
+
+    <article class="stop">
+      <div class="time">When ready</div>
+      <h3>Return to Bristol Hotel</h3>
+      <p>Walk back through Old Town if you still have energy, or take a short tram/taxi. You have already covered the strongest sights, food and shopping in one clean loop.</p>
+      <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Burkliplatz,+Zurich&destination=Bristol+Hotel,+Stampfenbachstrasse+34,+Zurich&travelmode=transit">🚋 Transit directions</a><a class="btn alt" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Burkliplatz,+Zurich&destination=Bristol+Hotel,+Stampfenbachstrasse+34,+Zurich&travelmode=walking">Walk back</a></div>
+    </article>
+  </section>
+
+  <h2 id="shopping">Shopping priorities</h2>
+  <section class="shopgrid">
+    <div class="shop"><h3>🧴 Osswald Parfumerie</h3><p>The strongest stop for niche fragrance and curated luxury beauty. Prioritize this over trying to visit every department store.</p><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=Osswald+Parfumerie+Zurich">Open in Google Maps →</a></div>
+    <div class="shop"><h3>✨ Globus</h3><p>Upscale department store for fragrance, beauty, accessories, fashion and food. Good for browsing multiple categories quickly.</p><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=Globus+Zurich+Bahnhofstrasse">Open in Google Maps →</a></div>
+    <div class="shop"><h3>👜 Bahnhofstrasse</h3><p>Zurich’s main luxury street. Browse LV, Hermès, Gucci, Cartier and Swiss watch retailers while walking toward Paradeplatz.</p><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=Bahnhofstrasse+Zurich">Open in Google Maps →</a></div>
+    <div class="shop"><h3>⌚ Watches</h3><p>Check Bucherer, Beyer or Rolex only if you are genuinely curious. Do not spend the whole afternoon waiting for a scarce model.</p><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=Rolex+Bucherer+Beyer+Bahnhofstrasse+Zurich">Find watch stores →</a></div>
+  </section>
+
+  <h2 id="food">Best orders for both of you</h2>
+  <section class="foodgrid">
+    <div class="food"><h3>Mina</h3><p><strong>Fondue</strong> for the iconic melted-cheese experience, or <strong>raclette</strong> for melted cheese over potatoes with pickles and onions. Ask whether fondue can be ordered for one person.</p></div>
+    <div class="food"><h3>Luka</h3><p><strong>Wiener schnitzel</strong>, veal sausage, bratwurst or another plain meat dish with fries or rösti. Confirm there is no cream sauce or cheese.</p></div>
+  </section>
+
+  <h2 id="map">Your route, visually</h2>
+  <section class="map" aria-label="Stylized map of tonight's Zurich route">
+    <div class="river"></div><div class="path"></div>
+    <span class="pin p1">Bristol Hotel</span><span class="pin p2">Swiss Chuchi</span><span class="pin p3">Osswald</span><span class="pin p4">Globus / Bahnhofstrasse</span><span class="pin p5">Old Town</span><span class="pin p6">Lake Zurich</span>
+  </section>
+
+  <p class="footer">Live practical itinerary for Wednesday afternoon. Store and kitchen hours can change; use the linked Google Maps listings to confirm live status before walking over.</p>
+</main>
+</body>
+</html>

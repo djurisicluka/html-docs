@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zurich Tonight · Luka + Mina</title>
+  <meta name="description" content="A simple live Zurich itinerary from Bristol Hotel: Swiss food, Old Town, river, lake, and chocolate." />
+  <style>
+    :root{
+      --bg:#fff8f2;--paper:#fffdf9;--ink:#2e2925;--muted:#746a63;--line:#eadfd5;
+      --red:#d94f4f;--blue:#88b8cc;--lake:#d7edf4;--gold:#e7b865;--green:#9dbb9a;--pink:#f0b8bd;
+      --shadow:0 18px 50px rgba(77,56,39,.12);
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;background:radial-gradient(circle at 8% 0,#fde8df 0,transparent 30rem),radial-gradient(circle at 100% 12%,#e5f3f7 0,transparent 28rem),var(--bg);color:var(--ink);line-height:1.5}
+    .wrap{max-width:980px;margin:0 auto;padding:22px 16px 60px}.hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:30px;padding:28px;background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,250,245,.8));box-shadow:var(--shadow)}
+    .kicker{display:inline-flex;gap:7px;align-items:center;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:#fff9f5;color:var(--muted);font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.hero h1{font-size:clamp(2.7rem,8vw,5.5rem);letter-spacing:-.075em;line-height:.9;margin:18px 0 14px;max-width:800px}.hero p{max-width:720px;color:var(--muted);font-size:1.05rem;margin:0}.pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.pill{padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.72);font-size:.87rem}.mini-route{margin-top:24px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px}.place{font-weight:900}.route-line{height:3px;border-radius:999px;background:linear-gradient(90deg,var(--pink),var(--gold),var(--blue));position:relative}.route-line:after{content:"✦";position:absolute;right:40%;top:50%;transform:translateY(-55%);font-size:20px;color:var(--red)}
+    .nav{position:sticky;top:0;z-index:20;margin:14px 0;background:rgba(255,248,242,.88);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:999px;padding:7px}.navin{display:flex;gap:7px;overflow:auto}.nav a{white-space:nowrap;text-decoration:none;color:var(--muted);padding:8px 11px;border-radius:999px;font-size:.85rem}.nav a:hover{background:white;color:var(--ink)}
+    h2{font-size:1.55rem;letter-spacing:-.035em;margin:30px 0 14px}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:22px;padding:17px;box-shadow:0 10px 30px rgba(77,56,39,.07)}.card b{display:block;font-size:1rem}.card span{color:var(--muted);font-size:.9rem}
+    .timeline{position:relative;padding-left:26px}.timeline:before{content:"";position:absolute;left:9px;top:12px;bottom:18px;width:3px;border-radius:999px;background:linear-gradient(var(--red),var(--gold),var(--blue),var(--green))}.item{position:relative;margin-bottom:16px;background:rgba(255,255,255,.86);border:1px solid var(--line);border-radius:24px;padding:18px 18px 17px;box-shadow:0 12px 32px rgba(77,56,39,.08)}.item:before{content:"";position:absolute;left:-23px;top:22px;width:13px;height:13px;border-radius:50%;background:white;border:4px solid var(--red);box-shadow:0 0 0 4px var(--bg)}.item:nth-child(2):before{border-color:var(--pink)}.item:nth-child(3):before{border-color:var(--gold)}.item:nth-child(4):before{border-color:var(--blue)}.item:nth-child(5):before{border-color:var(--green)}.item:nth-child(6):before{border-color:var(--red)}.time{font-size:.79rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--red)}.item h3{font-size:1.18rem;margin:4px 0 5px;letter-spacing:-.02em}.item p{margin:0;color:var(--muted)}.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.chip{padding:6px 9px;border-radius:999px;background:#fff7f2;border:1px solid var(--line);font-size:.8rem;color:#5f554f}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.btn{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:white;background:var(--ink);padding:9px 12px;border-radius:999px;font-size:.84rem;font-weight:800}.btn.alt{background:white;color:var(--ink);border:1px solid var(--line)}
+    .map{position:relative;min-height:290px;border-radius:28px;border:1px solid var(--line);overflow:hidden;background:linear-gradient(140deg,#f7efe8 0 48%,#dff0f6 48% 62%,#f7efe8 62%);box-shadow:var(--shadow)}.river{position:absolute;left:45%;top:-20%;width:15%;height:150%;background:linear-gradient(#cbe9f3,#add9e8);transform:rotate(7deg);border-left:5px solid rgba(255,255,255,.65);border-right:5px solid rgba(255,255,255,.65)}.routepath{position:absolute;left:22%;top:19%;width:56%;height:63%;border:3px dashed rgba(217,79,79,.65);border-radius:48% 42% 55% 46%;transform:rotate(-8deg)}.pin{position:absolute;transform:translate(-50%,-50%);background:white;border:1px solid var(--line);box-shadow:0 8px 22px rgba(77,56,39,.13);padding:7px 9px;border-radius:999px;font-size:.75rem;font-weight:800;white-space:nowrap}.pin:before{content:"●";color:var(--red);margin-right:6px}.p1{left:28%;top:18%}.p2{left:52%;top:28%}.p3{left:63%;top:47%}.p4{left:46%;top:60%}.p5{left:64%;top:78%}.p6{left:30%;top:78%}
+    .foodbox{display:grid;grid-template-columns:1fr 1fr;gap:12px}.food{padding:17px;border-radius:22px;border:1px solid var(--line);background:white}.food h3{margin:0 0 6px}.food p{margin:0;color:var(--muted)}.footer{margin-top:28px;color:var(--muted);font-size:.82rem;text-align:center}
+    @media(max-width:760px){.summary,.foodbox{grid-template-columns:1fr}.hero{padding:22px}.hero h1{font-size:3.2rem}.mini-route{grid-template-columns:1fr}.route-line{display:none}.map{min-height:250px}.pin{font-size:.68rem}.p1{left:26%}.p2{left:55%}.p3{left:66%}.p4{left:42%}.p5{left:65%}.p6{left:27%}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <span class="kicker">Zurich today · Luka + Mina</span>
+      <h1>Eat first. Then do the pretty part.</h1>
+      <p>You are starting at Bristol Hotel around 3:30 PM. The plan is intentionally easy: traditional Swiss food first, then one smooth walk through Old Town, the river, the lake, and a sweet stop before heading back.</p>
+      <div class="pillrow"><span class="pill">🍽️ Food first</span><span class="pill">🏛️ Old Town</span><span class="pill">🌊 Lake at golden hour</span><span class="pill">🍫 Chocolate finish</span></div>
+      <div class="mini-route"><span class="place">Bristol Hotel</span><div class="route-line"></div><span class="place">Swiss Chuchi → Old Town → Lake</span></div>
+    </section>
+
+    <nav class="nav"><div class="navin"><a href="#route">Route</a><a href="#map">Map</a><a href="#food">What to eat</a></div></nav>
+
+    <h2>Quick plan</h2>
+    <section class="summary">
+      <div class="card"><b>1. Eat</b><span>Swiss Chuchi for cheese + meat options.</span></div>
+      <div class="card"><b>2. Explore</b><span>Niederdorf → Grossmünster → Münsterhof.</span></div>
+      <div class="card"><b>3. Finish pretty</b><span>Lake Zurich + Sprüngli or a relaxed drink.</span></div>
+    </section>
+
+    <h2 id="route">Your live itinerary</h2>
+    <section class="timeline">
+      <article class="item">
+        <div class="time">3:35–3:55 PM</div>
+        <h3>Walk from Bristol Hotel to Swiss Chuchi</h3>
+        <p>Head toward Central and cross into Niederdorf. This gets you straight into the nicest part of the city without wasting time backtracking.</p>
+        <div class="chips"><span class="chip">~15 min walk</span><span class="chip">Easy start</span></div>
+        <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Bristol+Hotel,+Stampfenbachstrasse+34,+Zurich&destination=Swiss+Chuchi,+Rosengasse+10,+Zurich&travelmode=walking">📍 Directions</a></div>
+      </article>
+
+      <article class="item">
+        <div class="time">4:00–5:00 PM</div>
+        <h3>Eat at Swiss Chuchi</h3>
+        <p>Mina can try classic Swiss cheese dishes such as fondue or raclette. Luka can order a plain meat dish, schnitzel, sausage, or another non-creamy option.</p>
+        <div class="chips"><span class="chip">Mina: fondue / raclette</span><span class="chip">Luka: meat / schnitzel</span></div>
+        <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Swiss+Chuchi+Zurich">🍽️ Open restaurant</a></div>
+      </article>
+
+      <article class="item">
+        <div class="time">5:00–5:35 PM</div>
+        <h3>Niederdorf + Old Town lanes</h3>
+        <p>Slowly walk the narrow historic streets, little squares, shops, façades, and side alleys. This is the atmospheric part of Zurich—no need to rush.</p>
+        <div class="chips"><span class="chip">Historic lanes</span><span class="chip">Shops + photos</span></div>
+        <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Swiss+Chuchi,+Rosengasse+10,+Zurich&destination=Grossmunster,+Zurich&travelmode=walking&waypoints=Niederdorfstrasse,+Zurich">📍 Walk to Grossmünster</a></div>
+      </article>
+
+      <article class="item">
+        <div class="time">5:35–6:10 PM</div>
+        <h3>Grossmünster → river → Münsterhof</h3>
+        <p>See Zurich’s iconic twin-tower church, cross the Limmat, then reach Münsterhof and Fraumünster. This is the classic postcard section of the city.</p>
+        <div class="chips"><span class="chip">Iconic church</span><span class="chip">River views</span><span class="chip">Pretty square</span></div>
+        <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Grossmunster,+Zurich&destination=Munsterhof,+Zurich&travelmode=walking&waypoints=Munsterbrucke,+Zurich">📍 Cross to Münsterhof</a></div>
+      </article>
+
+      <article class="item">
+        <div class="time">6:10–6:45 PM</div>
+        <h3>Bahnhofstrasse + Paradeplatz</h3>
+        <p>Walk through Zurich’s famous shopping street. Browse luxury boutiques, watches, and Swiss stores if something catches your eye—do not turn it into a full shopping mission.</p>
+        <div class="chips"><span class="chip">Luxury shops</span><span class="chip">Rolex / watches</span><span class="chip">Sprüngli nearby</span></div>
+        <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Munsterhof,+Zurich&destination=Paradeplatz,+Zurich&travelmode=walking">📍 Walk to Paradeplatz</a></div>
+      </article>
+
+      <article class="item">
+        <div class="time">6:45–7:30 PM</div>
+        <h3>Lake Zurich at golden hour</h3>
+        <p>Continue to Bürkliplatz or Bellevue and sit by the water. This is the best place to slow down, take photos, and enjoy Zurich instead of just checking off sights.</p>
+        <div class="chips"><span class="chip">Lake views</span><span class="chip">Golden hour</span><span class="chip">Sit + relax</span></div>
+        <div class="actions"><a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Paradeplatz,+Zurich&destination=Burkliplatz,+Zurich&travelmode=walking">📍 Walk to the lake</a></div>
+      </article>
+
+      <article class="item">
+        <div class="time">7:30 PM onward</div>
+        <h3>Sprüngli chocolate, a drink, or head back</h3>
+        <p>If you still have energy, stop for Swiss chocolate or Luxemburgerli. Otherwise, take an easy walk or tram back to Bristol Hotel and keep the night relaxed before your flights tomorrow.</p>
+        <div class="chips"><span class="chip">Chocolate</span><span class="chip">Optional drink</span><span class="chip">No need to overdo it</span></div>
+        <div class="actions">
+          <a class="btn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Confiserie+Sprungli+Paradeplatz+Zurich">🍫 Sprüngli</a>
+          <a class="btn alt" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Burkliplatz,+Zurich&destination=Bristol+Hotel,+Stampfenbachstrasse+34,+Zurich&travelmode=transit">🏨 Back to hotel</a>
+        </div>
+      </article>
+    </section>
+
+    <h2 id="map">Simple route map</h2>
+    <section class="map" aria-label="Stylized Zurich route map">
+      <div class="river"></div><div class="routepath"></div>
+      <div class="pin p1">Bristol</div><div class="pin p2">Swiss Chuchi</div><div class="pin p3">Grossmünster</div><div class="pin p4">Münsterhof</div><div class="pin p5">Lake</div><div class="pin p6">Paradeplatz</div>
+    </section>
+
+    <h2 id="food">What each of you should eat</h2>
+    <section class="foodbox">
+      <div class="food"><h3>🧀 Mina</h3><p>Go for the traditional Swiss experience: cheese fondue or raclette. If she wants the most iconic option, choose fondue.</p></div>
+      <div class="food"><h3>🥩 Luka</h3><p>Ask for Wiener schnitzel, sausage, or another plain meat dish. Say: <strong>“Keine Rahmsauce und kein Käse, bitte.”</strong> — no cream sauce and no cheese.</p></div>
+    </section>
+
+    <p class="footer">Built as a practical live route from Bristol Hotel. Tap any Directions button to open Google Maps for the next step.</p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Credit Card Churning Command Center</title>
+<style>
+:root{
+  --bg:#07111f;--panel:#0e1b2e;--panel2:#12243b;--line:rgba(255,255,255,.1);
+  --text:#f7f9fc;--muted:#9fb0c6;--cyan:#79d7ff;--purple:#a78bfa;
+  --green:#35d399;--yellow:#fbbf24;--red:#fb7185;--blue:#60a5fa;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{
+  margin:0;background:
+  radial-gradient(circle at 8% 0,rgba(121,215,255,.16),transparent 32rem),
+  radial-gradient(circle at 100% 0,rgba(167,139,250,.14),transparent 34rem),
+  var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif
+}
+button,input,select{font:inherit}.shell{width:min(1420px,calc(100% - 28px));margin:auto;padding:24px 0 64px}
+.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border-radius:15px;
+ display:grid;place-items:center;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#06111d;font-weight:950}
+.brand h1{font-size:clamp(1.1rem,2.2vw,1.7rem);margin:0;letter-spacing:-.03em}.brand p{margin:4px 0 0;color:var(--muted);font-size:.86rem}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:rgba(255,255,255,.05);
+ color:var(--text);border-radius:12px;padding:10px 13px;cursor:pointer}.btn:hover{background:rgba(255,255,255,.09)}
+.hero,.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(18,36,59,.93),rgba(10,22,39,.9));
+ box-shadow:0 22px 65px rgba(0,0,0,.28)}.hero{border-radius:28px;padding:clamp(24px,4vw,46px);margin-bottom:18px;overflow:hidden;position:relative}
+.hero:after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;right:-130px;top:-190px;
+ background:radial-gradient(circle,rgba(121,215,255,.24),transparent 68%)}
+.eyebrow{text-transform:uppercase;letter-spacing:.16em;color:var(--cyan);font-size:.73rem;font-weight:850}
+.hero h2{font-size:clamp(2rem,5vw,4.2rem);line-height:.98;letter-spacing:-.055em;margin:10px 0 12px;max-width:950px}
+.hero p{color:var(--muted);max-width:920px;line-height:1.65;margin:0}.pills{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
+.pill{border:1px solid var(--line);background:rgba(255,255,255,.04);padding:8px 11px;border-radius:999px;font-size:.82rem}
+.grid{display:grid;gap:16px}.metrics{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:16px}
+.card{border-radius:21px}.metric{padding:20px;min-height:142px;display:flex;flex-direction:column;justify-content:space-between}
+.label{color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.value{font-size:clamp(2rem,4vw,3rem);font-weight:950;letter-spacing:-.055em}.sub{color:var(--muted);font-size:.82rem;line-height:1.4}
+.green{color:var(--green)}.yellow{color:var(--yellow)}.section{padding:22px;margin-top:16px}.section-head{display:flex;justify-content:space-between;
+ gap:16px;align-items:flex-end;margin-bottom:16px}.section h3{margin:0;font-size:1.2rem}.section-head p{color:var(--muted);margin:5px 0 0;font-size:.86rem}
+.two{grid-template-columns:1.1fr .9fr}.status-list,.drops{display:grid;gap:10px}.status{
+ display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:start;border:1px solid var(--line);
+ background:rgba(255,255,255,.03);border-radius:15px;padding:14px}.dot{width:11px;height:11px;border-radius:50%;margin-top:5px}
+.dot.good{background:var(--green)}.dot.warn{background:var(--yellow)}.dot.info{background:var(--blue)}
+.status strong{display:block;margin-bottom:4px}.status p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.45}
+.tag{font-size:.7rem;font-weight:900;border-radius:999px;padding:6px 9px}.tag.good{background:rgba(53,211,153,.13);color:#bcf7df}
+.tag.warn{background:rgba(251,191,36,.13);color:#ffe7a0}.tag.info{background:rgba(96,165,250,.13);color:#cce1ff}
+.drop{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:12px 0}.drop:last-child{border-bottom:0}
+.drop small{display:block;color:var(--muted);margin-top:3px}.drop b{text-align:right}.controls{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:13px}
+.field{border:1px solid var(--line);background:#091728;color:var(--text);border-radius:11px;padding:10px 11px;outline:none}
+.search{flex:1;min-width:220px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:15px}
+table{width:100%;border-collapse:collapse;min-width:1050px}th,td{padding:12px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{position:sticky;top:0;background:#0c1a2d;color:#b8c7da;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em}
+td{font-size:.86rem}tr:hover td{background:rgba(121,215,255,.035)}.muted{color:var(--muted)}
+.kind{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 7px;font-size:.68rem}
+.rules{grid-template-columns:repeat(3,minmax(0,1fr))}.rule{padding:17px}.rule h4{margin:0}.rule ul{padding-left:18px;margin:12px 0 0}
+.rule li{font-size:.84rem;line-height:1.45;margin:7px 0}.rule small{color:var(--muted)}
+.alert{border:1px solid rgba(251,191,36,.24);background:rgba(251,191,36,.075);color:#ffe8a7;border-radius:14px;padding:14px;font-size:.86rem;line-height:1.5}
+.checks{grid-template-columns:repeat(2,minmax(0,1fr))}.check{display:flex;gap:10px;border:1px solid var(--line);
+ background:rgba(255,255,255,.025);border-radius:13px;padding:12px;font-size:.84rem;line-height:1.45}.check input{accent-color:var(--green);margin-top:3px}
+dialog{width:min(620px,calc(100% - 24px));padding:0;border:1px solid var(--line);border-radius:20px;background:#0c192b;color:var(--text)}
+dialog::backdrop{background:rgba(0,6,14,.78);backdrop-filter:blur(5px)}.dialog-body{padding:21px}.form{grid-template-columns:repeat(2,minmax(0,1fr))}
+label{display:grid;gap:6px;color:#c6d3e3;font-size:.8rem}.dialog-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:17px}
+footer{color:var(--muted);text-align:center;font-size:.76rem;line-height:1.55;margin-top:24px}
+@media(max-width:1050px){.metrics{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.rules{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.shell{width:calc(100% - 16px);padding-top:12px}.top{align-items:flex-start;flex-direction:column}
+ .metrics,.rules,.checks,.form{grid-template-columns:1fr}.section{padding:17px}.hero{border-radius:21px}.status{grid-template-columns:auto 1fr}.status .tag{grid-column:2;justify-self:start}}
+@media print{body{background:white;color:#111}.actions,.controls,dialog{display:none!important}.hero,.card{box-shadow:none;background:white;color:#111;border-color:#bbb}.muted,.sub,.section-head p{color:#555!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="top">
+  <div class="brand"><div class="logo">5/24</div><div><h1>Credit Card Churning Command Center</h1><p>Opening history, rule tracking, and application planning</p></div></div>
+  <div class="actions"><button class="btn" onclick="window.print()">Print / PDF</button><button class="btn" onclick="exportData()">Export JSON</button><button class="btn" onclick="document.querySelector('#addDialog').showModal()">Add card</button></div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Household strategy • Luka profile</div>
+  <h2>Know exactly when the next application makes sense.</h2>
+  <p>This dashboard separates personal cards from business cards, calculates Chase 5/24 from confirmed opening dates, highlights issuer restrictions, and preserves uncertainty instead of guessing. No account numbers, balances, addresses, or tax information are stored here.</p>
+  <div class="pills"><span class="pill">Last reviewed: Aug 4, 2026</span><span class="pill">Source: Experian + approval emails</span><span class="pill">Business cards tracked separately</span></div>
+</section>
+
+<section class="grid metrics">
+  <article class="card metric"><div class="label">Current Chase 5/24</div><div id="metric524" class="value green">2/24</div><div class="sub">Personal revolving accounts opened in the rolling 24-month window.</div></article>
+  <article class="card metric"><div class="label">Known cards opened</div><div id="metricTotal" class="value">—</div><div class="sub">Confirmed or strongly supported personal and business products.</div></article>
+  <article class="card metric"><div class="label">Next 5/24 drop-off</div><div id="metricDrop" class="value yellow">—</div><div class="sub">Conservative date based on 24 months after opening.</div></article>
+  <article class="card metric"><div class="label">Recent Chase velocity</div><div id="metricVelocity" class="value">—</div><div class="sub">Known Chase approvals during the trailing 12 months.</div></article>
+</section>
+
+<section class="grid two">
+  <article class="card section">
+    <div class="section-head"><div><h3>Application readiness</h3><p>Signals that matter before submitting another application.</p></div></div>
+    <div id="readiness" class="status-list"></div>
+  </article>
+  <article class="card section">
+    <div class="section-head"><div><h3>5/24 drop-off calendar</h3><p>Only personal cards that appear on consumer reports count.</p></div></div>
+    <div id="dropList" class="drops"></div>
+  </article>
+</section>
+
+<section class="card section">
+  <div class="section-head"><div><h3>Opening history</h3><p>Use filters to isolate issuers, personal cards, business cards, or uncertain records.</p></div></div>
+  <div class="controls">
+    <input id="search" class="field search" placeholder="Search card, issuer, notes…" oninput="renderTable()">
+    <select id="issuerFilter" class="field" onchange="renderTable()"><option value="">All issuers</option></select>
+    <select id="typeFilter" class="field" onchange="renderTable()"><option value="">Personal + business</option><option>Personal</option><option>Business</option></select>
+    <select id="statusFilter" class="field" onchange="renderTable()"><option value="">All statuses</option><option>Open</option><option>Closed</option><option>Unknown</option></select>
+  </div>
+  <div class="table-wrap"><table><thead><tr><th>Opened</th><th>Issuer / card</th><th>Type</th><th>Status</th><th>5/24</th><th>Confidence</th><th>Planning notes</th></tr></thead><tbody id="historyBody"></tbody></table></div>
+</section>
+
+<section class="card section">
+  <div class="section-head"><div><h3>Issuer rulebook</h3><p>Conservative planning guardrails—not guarantees. Always read the exact application terms.</p></div></div>
+  <div class="grid rules">
+    <article class="card rule"><h4>Chase</h4><ul><li>Most Chase cards are subject to the informal <b>5/24</b> rule.</li><li>Chase business cards usually require being below 5/24 but generally do not add to 5/24 when absent from personal reports.</li><li>Space Chase applications; roughly 90 days is a safer working cadence than stacking applications.</li><li>Sapphire eligibility wording changes. Read the live product-specific bonus language before applying.</li></ul><small>Hard: 5/24 behavior. Soft: velocity and total Chase exposure.</small></article>
+    <article class="card rule"><h4>American Express</h4><ul><li>Welcome-offer eligibility is commonly once per product/lifetime unless the offer omits lifetime language.</li><li>The application pop-up is the strongest real-time signal; cancel before acceptance if it says no bonus.</li><li>Personal Platinum history does not automatically equal Business Platinum history; they are distinct products.</li><li>Common credit-card velocity guidance: about 1 approval per 5 days and 2 per 90 days; charge cards may behave differently.</li></ul><small>Your known personal Platinum history is flagged below.</small></article>
+    <article class="card rule"><h4>Citi</h4><ul><li>Common velocity guardrails: 1 application per 8 days and 2 per 65 days.</li><li>Business applications are often spaced about 90 days.</li><li>Bonus clocks vary by product/family and can be based on opening or closing; read the exact terms.</li></ul><small>Do not assume every ThankYou or AAdvantage card shares one clock.</small></article>
+    <article class="card rule"><h4>Capital One</h4><ul><li>Capital One can be sensitive to many open accounts and recent inquiries.</li><li>Use the issuer's pre-approval flow when available before taking a hard pull.</li><li>Product-specific prior-bonus and current-card restrictions matter more than old universal folklore.</li></ul><small>Your two legacy Capital One products remain unidentified.</small></article>
+    <article class="card rule"><h4>Bank of America</h4><ul><li>Common approval guidance: 2 cards in 2 months, 3 in 12 months, and 4 in 24 months.</li><li>New-account sensitivity is often described as 3/12 without a deposit relationship and 7/12 with one.</li><li>Alaska/Atmos product eligibility terms should be checked card by card.</li></ul><small>Relationship banking can materially change outcomes.</small></article>
+    <article class="card rule"><h4>Barclays / Wells / U.S. Bank</h4><ul><li>Barclays is often sensitive to many recent accounts and weak card usage.</li><li>Wells Fargo welcome-offer spacing and product restrictions vary; verify the current terms.</li><li>U.S. Bank is commonly inquiry/new-account sensitive, especially for premium products.</li></ul><small>For all three, low recent velocity materially helps.</small></article>
+  </div>
+</section>
+
+<section class="grid two">
+  <article class="card section">
+    <div class="section-head"><div><h3>Before every application</h3><p>A two-minute check prevents most avoidable mistakes.</p></div></div>
+    <div class="grid checks">
+      <label class="check"><input type="checkbox"><span>Confirm the exact welcome bonus, spend requirement, deadline, and annual fee.</span></label>
+      <label class="check"><input type="checkbox"><span>Confirm issuer eligibility based on prior card ownership and bonus dates.</span></label>
+      <label class="check"><input type="checkbox"><span>Check 5/24 and whether the new account will report personally.</span></label>
+      <label class="check"><input type="checkbox"><span>Compare public, targeted, in-branch, and referral offers before applying.</span></label>
+      <label class="check"><input type="checkbox"><span>Screenshot the offer page and save the application/approval date.</span></label>
+      <label class="check"><input type="checkbox"><span>Verify organic spend and ability to pay the statement in full.</span></label>
+      <label class="check"><input type="checkbox"><span>Check recent inquiries, issuer velocity, and existing credit exposure.</span></label>
+      <label class="check"><input type="checkbox"><span>Plan how household points can be combined or transferred before committing.</span></label>
+    </div>
+  </article>
+  <article class="card section">
+    <div class="section-head"><div><h3>Known data gaps</h3><p>These should be identified before relying on lifetime eligibility calculations.</p></div></div>
+    <div class="alert">
+      <b>Still unidentified:</b> two Capital One cards opened in 2015–2016, the Citi/CBNA card opened in 2016, the Amex account opened March 2020, and the Chase account opened July 2022. The dashboard deliberately does not guess their products or bonuses.
+    </div>
+  </article>
+</section>
+
+<footer>Planning tool only. Issuer rules and application terms change. Verify the live application language before every submission. Browser-added cards remain on this device through localStorage.</footer>
+</div>
+
+<dialog id="addDialog"><form method="dialog" class="dialog-body" onsubmit="addCard(event)">
+<h3 style="margin-top:0">Add a card</h3>
+<div class="grid form">
+<label>Opened date<input class="field" name="opened" type="date" required></label>
+<label>Issuer<input class="field" name="issuer" required></label>
+<label>Card name<input class="field" name="card" required></label>
+<label>Type<select class="field" name="type"><option>Personal</option><option>Business</option></select></label>
+<label>Status<select class="field" name="status"><option>Open</option><option>Closed</option><option>Unknown</option></select></label>
+<label>Counts toward 5/24<select class="field" name="counts524"><option value="true">Yes</option><option value="false">No</option></select></label>
+<label style="grid-column:1/-1">Notes<input class="field" name="notes"></label>
+</div>
+<div class="dialog-actions"><button class="btn" value="cancel" type="button" onclick="addDialog.close()">Cancel</button><button class="btn" type="submit">Save locally</button></div>
+</form></dialog>
+
+<script>
+const baseCards = [
+ {opened:"2015-02-15",issuer:"Discover",card:"Discover card",type:"Personal",status:"Open",counts524:true,confidence:"Confirmed",notes:"Oldest known revolving account."},
+ {opened:"2015-12-25",issuer:"Capital One",card:"Legacy Capital One card",type:"Personal",status:"Open",counts524:true,confidence:"Product unknown",notes:"Exact product and original bonus unknown."},
+ {opened:"2016-04-26",issuer:"Capital One",card:"Legacy Capital One card",type:"Personal",status:"Open",counts524:true,confidence:"Product unknown",notes:"Exact product and original bonus unknown."},
+ {opened:"2016-11-19",issuer:"Citi",card:"CBNA credit card",type:"Personal",status:"Open",counts524:true,confidence:"Product unknown",notes:"Identify product before calculating Citi family bonus history."},
+ {opened:"2016-12-15",issuer:"Chase",card:"Chase Freedom",type:"Personal",status:"Open",counts524:true,confidence:"Confirmed",notes:"Welcome email dated Dec 23, 2016."},
+ {opened:"2019-06-11",issuer:"Chase",card:"Sapphire Preferred",type:"Personal",status:"Open",counts524:true,confidence:"High",notes:"Credit report opening date; approval/welcome email dated Jun 15, 2019."},
+ {opened:"2020-03-02",issuer:"Amex",card:"Unknown Amex card",type:"Personal",status:"Closed",counts524:true,confidence:"Product unknown",notes:"Closed May 2020. Identify before relying on Amex lifetime eligibility."},
+ {opened:"2020-04-24",issuer:"Apple / Goldman Sachs",card:"Apple Card",type:"Personal",status:"Open",counts524:true,confidence:"Confirmed",notes:"Personal revolving account."},
+ {opened:"2020-04-24",issuer:"Synchrony",card:"Amazon Store Card",type:"Personal",status:"Open",counts524:true,confidence:"Confirmed",notes:"Personal retail account."},
+ {opened:"2021-07-28",issuer:"Amex",card:"Personal Platinum",type:"Personal",status:"Closed",counts524:true,confidence:"Confirmed",notes:"Closed Sep 2022. Normal personal Platinum welcome offer is likely unavailable under lifetime language."},
+ {opened:"2022-07-01",issuer:"Chase",card:"Unknown Chase card",type:"Personal",status:"Closed",counts524:true,confidence:"Product unknown",notes:"Closed Aug 2023. Identify before product-specific eligibility decisions."},
+ {opened:"2024-01-04",issuer:"Chase",card:"Ink Business Preferred",type:"Business",status:"Unknown",counts524:false,confidence:"Confirmed",notes:"Business card; usually does not add to 5/24."},
+ {opened:"2024-07-14",issuer:"Chase",card:"Ink Business Unlimited",type:"Business",status:"Unknown",counts524:false,confidence:"Confirmed",notes:"Business card; usually does not add to 5/24."},
+ {opened:"2025-04-03",issuer:"Chase",card:"Sapphire Preferred",type:"Personal",status:"Open",counts524:true,confidence:"Confirmed",notes:"Drops from conservative 5/24 calculation Apr 3, 2027."},
+ {opened:"2025-07-22",issuer:"Chase",card:"Ink Business Cash",type:"Business",status:"Unknown",counts524:false,confidence:"Confirmed",notes:"Business card; approval email confirmed."},
+ {opened:"2025-12-04",issuer:"Chase",card:"Sapphire Reserve for Business",type:"Business",status:"Open",counts524:false,confidence:"Confirmed",notes:"Applied Dec 1, 2025; approved Dec 4, 2025."},
+ {opened:"2026-06-04",issuer:"Chase",card:"Sapphire Reserve",type:"Personal",status:"Open",counts524:true,confidence:"Confirmed",notes:"Applied May 31, 2026; approved Jun 4, 2026. Welcome bonus completed."}
+];
+const localCards = JSON.parse(localStorage.getItem("churning-extra-cards") || "[]");
+let cards = [...baseCards,...localCards];
+const TODAY = new Date("2026-08-04T12:00:00");
+const fmt = d => new Intl.DateTimeFormat("en-US",{year:"numeric",month:"short",day:"numeric"}).format(new Date(d+"T12:00:00"));
+const plusMonths = (s,n) => {const d=new Date(s+"T12:00:00");d.setMonth(d.getMonth()+n);return d};
+const in524 = c => c.counts524 && new Date(c.opened+"T12:00:00") > new Date("2024-08-04T00:00:00");
+function initialize(){
+ const issuers=[...new Set(cards.map(c=>c.issuer))].sort();
+ issuerFilter.innerHTML='<option value="">All issuers</option>'+issuers.map(x=>`<option>${x}</option>`).join("");
+ renderAll();
+}
+function renderAll(){
+ const active=cards.filter(in524).sort((a,b)=>a.opened.localeCompare(b.opened));
+ metric524.textContent=`${active.length}/24`;
+ metricTotal.textContent=cards.length;
+ const drops=active.map(c=>({card:c.card,date:plusMonths(c.opened,24)})).sort((a,b)=>a.date-b.date);
+ metricDrop.textContent=drops.length?drops[0].date.toLocaleDateString("en-US",{month:"short",year:"numeric"}):"None";
+ const yearAgo=new Date(TODAY);yearAgo.setFullYear(yearAgo.getFullYear()-1);
+ metricVelocity.textContent=cards.filter(c=>c.issuer==="Chase"&&new Date(c.opened+"T12:00:00")>=yearAgo).length;
+ dropList.innerHTML=drops.length?drops.map(d=>`<div class="drop"><div><b>${d.card}</b><small>Conservative 24-month drop-off</small></div><b>${d.date.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}</b></div>`).join(""):'<div class="muted">No current 5/24 accounts.</div>';
+ const chaseRecent=cards.filter(c=>c.issuer==="Chase"&&new Date(c.opened+"T12:00:00")>=yearAgo).length;
+ readiness.innerHTML=[
+  ["good","Below Chase 5/24",`${active.length}/24 leaves room for additional Chase applications, but issuer velocity and total exposure still matter.`,"GREEN"],
+  [chaseRecent>=3?"warn":"info","Chase velocity",`${chaseRecent} known Chase approvals in the trailing year. Diversifying away from Chase is reasonable before adding more Chase exposure.`,chaseRecent>=3?"WATCH":"OK"],
+  ["warn","Amex personal Platinum history","A personal Platinum opened in 2021 and closed in 2022. Do not expect another standard personal Platinum bonus; Business Platinum is a separate product, subject to the pop-up.","VERIFY"],
+  ["info","Data completeness","Several older products remain unidentified. Resolve them before relying on Citi or Amex product-family eligibility.","ACTION"]
+ ].map(x=>`<div class="status"><span class="dot ${x[0]}"></span><div><strong>${x[1]}</strong><p>${x[2]}</p></div><span class="tag ${x[0]}">${x[3]}</span></div>`).join("");
+ renderTable();
+}
+function renderTable(){
+ const q=search.value.toLowerCase(),iss=issuerFilter.value,typ=typeFilter.value,st=statusFilter.value;
+ const rows=cards.filter(c=>(!q||JSON.stringify(c).toLowerCase().includes(q))&&(!iss||c.issuer===iss)&&(!typ||c.type===typ)&&(!st||c.status===st))
+  .sort((a,b)=>b.opened.localeCompare(a.opened));
+ historyBody.innerHTML=rows.map(c=>`<tr><td><b>${fmt(c.opened)}</b></td><td><span class="muted">${c.issuer}</span><br><b>${c.card}</b></td><td><span class="kind">${c.type}</span></td><td>${c.status}</td><td>${c.counts524?"Yes":"No"}${in524(c)?'<br><span class="tag warn">CURRENT</span>':""}</td><td>${c.confidence}</td><td class="muted">${c.notes||""}</td></tr>`).join("");
+}
+function addCard(e){
+ e.preventDefault();const f=new FormData(e.target);
+ const c={opened:f.get("opened"),issuer:f.get("issuer"),card:f.get("card"),type:f.get("type"),status:f.get("status"),counts524:f.get("counts524")==="true",confidence:"User-added",notes:f.get("notes")};
+ localCards.push(c);localStorage.setItem("churning-extra-cards",JSON.stringify(localCards));cards=[...baseCards,...localCards];addDialog.close();e.target.reset();initialize();
+}
+function exportData(){
+ const blob=new Blob([JSON.stringify({exported:new Date().toISOString(),cards},null,2)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="credit-card-history.json";a.click();URL.revokeObjectURL(a.href);
+}
+initialize();
+</script>
+</body>
+</html>

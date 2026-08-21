@@ -31,3 +31,4 @@ jobs:
           git add -A
           git commit -m "Fix Etno owner avatar and clean staging files"
           git push origin HEAD:main
+# trigger via contents API

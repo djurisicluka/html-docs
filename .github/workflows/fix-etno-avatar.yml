@@ -1,0 +1,33 @@
+name: One-time Etno avatar repair
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-etno-avatar.yml'
+      - 'etno-kuca-gracanica/owner-head.b64'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rebuild clean owner image and remove staging files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd etno-kuca-gracanica
+          cat owner-head.b64 owner-v3.b64 | tr -d '\r\n ' | base64 --decode > owner.webp
+          test "$(wc -c < owner.webp | tr -d ' ')" = "23508"
+          rm -f THIS_WAS_A_TOOLING_MISTAKE.txt cleanup-note.txt last-temp.txt owner-v2.txt owner-v2.webp owner-v3.b64 owner-v4.b64 stop.txt test.txt owner-head.b64
+          cd ..
+          rm -f .github/workflows/fix-etno-avatar.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Fix Etno owner avatar and clean staging files"
+          git push origin HEAD:main

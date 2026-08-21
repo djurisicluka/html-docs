@@ -102,3 +102,5 @@ jobs:
           git add -A
           git commit -m "Use approved owner portrait in Etno calculator"
           git push origin HEAD:main
+
+# retry after verified chunks
